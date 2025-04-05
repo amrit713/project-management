@@ -15,7 +15,7 @@ export const useRegister = () => {
         {
           email: json.email,
           password: json.password,
-          name: json.password,
+          name: json.name,
           callbackURL: "/",
         },
         {

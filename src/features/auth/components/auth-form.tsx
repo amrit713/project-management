@@ -65,7 +65,8 @@ export const AuthForm = <T extends FieldValues>({
 
   const onSubmitHandler: SubmitHandler<T> = (values) => {
     onSubmit(values);
-    console.log(values);
+
+    console.log("🚀 ~ values:", values);
   };
 
   return (

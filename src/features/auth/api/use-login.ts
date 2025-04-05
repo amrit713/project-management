@@ -21,6 +21,8 @@ export const useLogin = () => {
           onSuccess: (ctx) => {
             toast.success("User login successfully! ✅");
             router.push("/");
+            router.refresh();
+            //todo: if need add queryclient and invlidate query client
           },
           onError: (ctx) => {
             toast.error(`${ctx.error.message} ⚠️`);
