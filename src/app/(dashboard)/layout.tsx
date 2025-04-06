@@ -3,6 +3,8 @@ import React from "react";
 import { currentUser } from "@/lib/current-user";
 import { redirect } from "next/navigation";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { Navbar } from "@/components/navbar";
 
 async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await currentUser();
@@ -10,9 +12,11 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
   if (!user) redirect("/sign-in");
   return (
     <SidebarProvider>
-      <main className="flex  w-full">
-        <SidebarTrigger />
-        <div className="  w-full">{children}</div>
+      <AppSidebar />
+
+      <main className="  w-full">
+        <Navbar />
+        {children}
       </main>
     </SidebarProvider>
   );
