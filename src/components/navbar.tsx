@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 
 export const Navbar = () => {
   return (
-    <nav className="px-4 py-4.5  flex justify-between items-center">
+    <nav className="px-4 h-[5rem] flex justify-between items-center">
       <div className="flex items-center gap-4">
         <Button asChild variant={"ghost"} size={"icon"}>
           <SidebarTrigger size={"lg"} />

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Navbar } from "@/components/navbar";
+import { CreateWorkspaceModal } from "@/features/workspaces/components/create-workspace-modal";
 
 async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await currentUser();
@@ -12,9 +13,10 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
   if (!user) redirect("/sign-in");
   return (
     <SidebarProvider>
+      <CreateWorkspaceModal />
       <AppSidebar />
 
-      <main className="  w-full">
+      <main className="w-full">
         <Navbar />
         {children}
       </main>

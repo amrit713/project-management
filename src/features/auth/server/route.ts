@@ -1,7 +1,5 @@
 import { Hono } from "hono";
 import { auth } from "@/lib/auth";
-import { zValidator } from "@hono/zod-validator";
-import { loginSchema } from "@/features/auth/schema";
 
 const app = new Hono<{
   Variables: {

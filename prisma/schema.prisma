@@ -22,7 +22,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   workspaces    Workspace[]
-  Member        Member[]
+  members       Member[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -78,16 +78,19 @@ model Verification {
 }
 
 model Workspace {
-  id       String  @id @default(uuid())
-  name     String
-  imageUrl String?
-  userId   String
-  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String  @id @default(uuid())
+  name       String
+  imageUrl   String?
+  userId     String
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  inviteCode String  @unique
 
-  Member Member[]
+  members Member[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, name])
 }
 
 enum MemberRole {

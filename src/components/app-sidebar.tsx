@@ -18,9 +18,11 @@ import { Button } from "./ui/button";
 import { DottedSeperator } from "./dotted-separator";
 import { SIDEBAR_MENU_ITEM } from "@/constants";
 import { cn } from "@/lib/utils";
+import { WorkspaceSwitcher } from "./workspace-switcher";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
+
   return (
     <Sidebar>
       <SidebarHeader className="px-4 py-6">
@@ -38,9 +40,7 @@ export const AppSidebar = () => {
           {/* todo */}
           <SidebarMenu>
             <SidebarMenuItem>
-              <Button className="w-full" variant={"teritrary"}>
-                Workspaces
-              </Button>
+              <WorkspaceSwitcher />
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
