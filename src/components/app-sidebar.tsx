@@ -19,9 +19,13 @@ import { DottedSeperator } from "./dotted-separator";
 import { SIDEBAR_MENU_ITEM } from "@/constants";
 import { cn } from "@/lib/utils";
 import { WorkspaceSwitcher } from "./workspace-switcher";
+import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
+  const { open } = useCreateWorkspaceModal();
+  const workspaceId = useWorkspaceId();
 
   return (
     <Sidebar>
@@ -32,7 +36,7 @@ export const AppSidebar = () => {
       <SidebarGroup>
         <SidebarGroupLabel className=" flex items-center justify-between">
           <p className="uppercase text-neutral-500 text-sm">Workspaces</p>
-          <Button size={"icon"} variant={"ghost"}>
+          <Button size={"icon"} variant={"ghost"} onClick={open}>
             <PlusCircle />
           </Button>
         </SidebarGroupLabel>
@@ -51,12 +55,13 @@ export const AppSidebar = () => {
         <SidebarGroupContent>
           <SidebarMenu>
             {SIDEBAR_MENU_ITEM.map((item) => {
-              const isActive = pathname === item.href;
+              const fullHref = `/workspaces/${workspaceId}${item.href}`;
+              const isActive = pathname === fullHref;
               const Icon = isActive ? item.activeIcon : item.icon;
               return (
                 <SidebarMenuItem key={item.label}>
                   <Link
-                    href={item.href}
+                    href={fullHref}
                     className={cn(
                       "flex flex-items-center gap-2 py-3 px-2 hover:bg-white transition rounded font-medium hover:text-black text-neutral-500 ",
                       isActive && "bg-white text-black "

@@ -13,6 +13,11 @@ export const useCreateWorkspace = () => {
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ form }) => {
       const response = await client.api.workspaces.$post({ form });
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error);
+      }
       return await response.json();
     },
     onSuccess: (ctx) => {

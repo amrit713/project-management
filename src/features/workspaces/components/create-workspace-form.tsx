@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
 import { useCreateWorkspace } from "../api/use-create-workspace";
+import { cn } from "@/lib/utils";
 
 interface CreateWorkspaceFormProps {
   onCancel?: () => void;
@@ -27,11 +28,8 @@ interface CreateWorkspaceFormProps {
 
 export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
   const router = useRouter();
-  const {
-    mutate: createWorkspace,
-    isPending,
-    isSuccess,
-  } = useCreateWorkspace();
+
+  const { mutate: createWorkspace, isPending } = useCreateWorkspace();
 
   const form = useForm<z.infer<typeof workspaceSchema>>({
     resolver: zodResolver(workspaceSchema),
@@ -53,9 +51,10 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
     createWorkspace(
       { form: finalValues },
       {
-        onSuccess: () => {
+        onSuccess: ({ data }) => {
           form.reset();
-          router.refresh();
+          router.push(`/workspaces/${data.id}`);
+          console.log(data.id);
         },
       }
     );
@@ -119,7 +118,12 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
               <DottedSeperator className="py-6" />
 
               <div className="flex items-center  gap-4 ">
-                <Button variant={"secondary"} type="button" className="flex-1">
+                <Button
+                  variant={"secondary"}
+                  type="button"
+                  className={cn("flex-1", !onCancel && "invisible")}
+                  onClick={onCancel}
+                >
                   Cancel
                 </Button>
                 <Button type="submit" disabled={isPending} className="flex-1">

@@ -27,7 +27,7 @@ export const FIELD_PLACEHOLDER = {
 export const SIDEBAR_MENU_ITEM = [
   {
     label: "Home",
-    href: "/",
+    href: "",
     icon: GoHome,
     activeIcon: GoHomeFill,
   },

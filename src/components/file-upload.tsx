@@ -45,18 +45,20 @@ export const FileUpload = ({ onChange, endpoint, value }: FileUploadProps) => {
       description: "Please choose a PNG, JPG or JPEG image insead.",
     });
   };
+
   const onDropAccepted = (acceptedFiles: File[]) => {
     startUpload(acceptedFiles);
 
     setIsDragOver(false);
   };
-  if (value) {
+
+  if (value && (value.startsWith("/") || value.startsWith("http"))) {
     return (
       <div className="flex flex-col  bg-neutral-50 rounded-md border p-4">
         <div className="relative w-30 h-30">
           <Image
             src={value}
-            className="object-cover border-2 border-primary/10 rounded-lg"
+            className=" object-cover border-2 border-primary/10 rounded-lg"
             alt="uploaded-image"
             fill
           />

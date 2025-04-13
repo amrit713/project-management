@@ -18,8 +18,6 @@ export const ResponsiveModal = ({
 }: ResponsiveModalProps) => {
   const isMobile = useIsMobile();
 
-  console.log(isMobile);
-
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>

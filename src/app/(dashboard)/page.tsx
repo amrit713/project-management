@@ -1,5 +1,5 @@
 import { UserButton } from "@/features/auth/components/user-button";
-import { getWorkspaces } from "@/features/workspaces/actions";
+import { getWorkspaces } from "@/features/workspaces/queries";
 import { CreateWorkspaceForm } from "@/features/workspaces/components/create-workspace-form";
 import { currentUser } from "@/lib/current-user";
 import { redirect } from "next/navigation";

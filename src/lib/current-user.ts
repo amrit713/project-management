@@ -1,7 +1,5 @@
 import { headers } from "next/headers";
-
 import { auth } from "./auth";
-import { db } from "./db";
 
 export const currentUser = async () => {
   try {

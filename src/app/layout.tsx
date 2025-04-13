@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/components/query-provider";
 import { Toaster } from "sonner";
+import {NuqsAdapter} from "nuqs/adapters/next/app";
+import React from "react";
 
 const font = Inter({ subsets: ["latin"] });
 
@@ -23,7 +25,11 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Toaster />
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+            <NuqsAdapter>{children}</NuqsAdapter>
+
+
+        </QueryProvider>
       </body>
     </html>
   );
