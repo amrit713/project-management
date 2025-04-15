@@ -13,7 +13,7 @@ export const getProject = async ({
   const user = await currentUser();
 
   if (!user) {
-    throw Error("Unauthorized");
+    throw new Error("Unauthorized");
   }
 
   const project = await db.project.findFirst({
@@ -24,7 +24,7 @@ export const getProject = async ({
   });
 
   if (!project) {
-    throw Error("No project found");
+    throw new Error("No project found");
   }
 
   const member = await db.member.findFirst({
