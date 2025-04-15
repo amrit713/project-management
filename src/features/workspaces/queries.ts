@@ -1,8 +1,5 @@
-"use server";
-
 import { currentUser } from "@/lib/current-user";
 import { db } from "@/lib/db";
-import { UserRound } from "lucide-react";
 
 export const getWorkspaces = async () => {
   try {
@@ -47,36 +44,32 @@ export const getWorkspaces = async () => {
 };
 
 export const getWorkspace = async (id: string) => {
-  try {
-    const user = await currentUser();
+  const user = await currentUser();
 
-    if (!user) {
-      return null;
-    }
-
-    const member = await db.member.findFirst({
-      where: {
-        userId: user.id,
-        workspaceId: id,
-      },
-    });
-
-    if (!member) return null;
-
-    const workspace = await db.workspace.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!workspace) {
-      return null;
-    }
-
-    return workspace;
-  } catch (error) {
-    return null;
+  if (!user) {
+    throw Error("Unauthorized");
   }
+
+  const member = await db.member.findFirst({
+    where: {
+      userId: user.id,
+      workspaceId: id,
+    },
+  });
+
+  if (!member) throw Error("you are not a member");
+
+  const workspace = await db.workspace.findFirst({
+    where: {
+      id,
+    },
+  });
+
+  if (!workspace) {
+    throw Error("no workspace found");
+  }
+
+  return workspace;
 };
 
 export const getWorkspaceInfo = async (id: string) => {

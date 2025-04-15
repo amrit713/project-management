@@ -3,16 +3,25 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-type ResponseType = InferResponseType<(typeof client.api.projects)["$post"]>;
-type RequestType = InferRequestType<(typeof client.api.projects)["$post"]>;
+type ResponseType = InferResponseType<
+  (typeof client.api.projects)[":projectId"]["$patch"]
+>;
+type RequestType = InferRequestType<
+  (typeof client.api.projects)[":projectId"]["$patch"]
+>;
 
-export const useCreateProject = () => {
+export const useUpdateProject = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ form }) => {
-      const response = await client.api.projects.$post({ form });
+    mutationFn: async ({ form, param }) => {
+      const response = await client.api.projects[":projectId"].$patch({
+        form,
+        param,
+      });
 
       if (!response.ok) {
         const error = await response.text();
@@ -21,12 +30,13 @@ export const useCreateProject = () => {
       return await response.json();
     },
     onSuccess: (ctx) => {
-      toast.success("Project created");
+      toast.success("Project updated");
+      router.refresh();
       queryClient.invalidateQueries({ queryKey: ["projects"] }); //refetch  account key
     },
 
     onError: () => {
-      toast.error("Failed to create project");
+      toast.error("Failed to update project");
     },
   });
 

@@ -7,3 +7,9 @@ export const createProjectSchema = z.object({
     .optional(),
   workspaceId: z.string().optional(),
 });
+export const updateProjectSchema = z.object({
+  name: string().trim().min(3, "project must have 3 character").optional(),
+  imageUrl: string()
+    .transform((value) => (value === "" ? undefined : value))
+    .optional(),
+});

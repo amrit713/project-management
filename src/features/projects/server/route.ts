@@ -5,7 +5,8 @@ import { Session, User } from "better-auth";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
-import { createProjectSchema } from "../schema";
+import { createProjectSchema, updateProjectSchema } from "../schema";
+import { MemberRole } from "@prisma/client";
 
 type Variables = {
   user: User | null;
@@ -90,6 +91,62 @@ const app = new Hono<{ Variables: Variables }>()
       }
 
       return c.json({ data: project });
+    }
+  )
+  .patch(
+    "/:projectId",
+    zValidator("form", updateProjectSchema),
+    authMiddleware,
+    async (c) => {
+      const user = c.get("user");
+
+      if (!user) {
+        throw new HTTPException(401, { message: "unauthorized user" });
+      }
+
+      const { name, imageUrl } = c.req.valid("form");
+      const { projectId } = c.req.param();
+
+      if (!projectId) {
+        throw new HTTPException(400, { message: "project not found" });
+      }
+
+      //TODO: only admin can edit or delete project feature need or not in future
+
+      const existingProject = await db.project.findFirst({
+        where: {
+          id: projectId,
+        },
+      });
+
+      if (!existingProject) {
+        throw new HTTPException(404, { message: "project not found" });
+      }
+
+      const member = await db.member.findFirst({
+        where: {
+          userId: user.id,
+          workspaceId: existingProject.workspaceId,
+        },
+      });
+
+      if (!member) {
+        throw new HTTPException(404, {
+          message: "you are not member of this workspace",
+        });
+      }
+
+      const updatedProject = await db.project.update({
+        where: {
+          id: projectId,
+        },
+        data: {
+          imageUrl,
+          name,
+        },
+      });
+
+      return c.json({ data: updatedProject });
     }
   );
 

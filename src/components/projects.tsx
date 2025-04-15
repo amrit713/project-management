@@ -29,10 +29,13 @@ export const Projects = () => {
           >
             <div
               className={cn(
-                "flex flex-items-center gap-2 py-2 px-2   hover:opacity-100 opacity-75 transition rounded font-medium hover:text-black text-neutral-700  ",
+                "flex items-center gap-2 py-2 px-2   hover:opacity-100 opacity-75 transition rounded font-medium hover:text-black text-neutral-700  ",
                 isActive && " bg-white opacity-100 text-black shadow"
               )}
             >
+              {/* TODO: need to make delete or edit button on hover
+               */}
+
               <ProjectAvatar
                 image={project.imageUrl ? project.imageUrl : ""}
                 name={project.name}

@@ -25,7 +25,7 @@ import { Workspace } from "@prisma/client";
 import { useUpdateWorkspace } from "../api/use-update-workspace";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteWorkspace } from "../api/use-delete-workspace";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useResetInviteCode } from "../api/use-reset-invite-code";
 
@@ -70,30 +70,13 @@ export const EditWorkspaceForm = ({
     const ok = await confirmDelete();
 
     if (!ok) return;
-    deleteWorkspace(
-      { param: { workspaceId: initialValues.id } },
-      {
-        onSuccess: () => {
-          router.push(`/`);
-          // window.location.href = "/"; hard reload and remove cache
-
-          router.refresh;
-        },
-      }
-    );
+    deleteWorkspace({ param: { workspaceId: initialValues.id } });
   };
   const handleResetInviteLink = async () => {
     const ok = await confirmReset();
 
     if (!ok) return;
-    resetInviteCode(
-      { param: { workspaceId: initialValues.id } },
-      {
-        onSuccess: () => {
-          router.refresh();
-        },
-      }
-    );
+    resetInviteCode({ param: { workspaceId: initialValues.id } });
   };
 
   const onSubmit = async (values: z.infer<typeof updateWorkspaceSchema>) => {

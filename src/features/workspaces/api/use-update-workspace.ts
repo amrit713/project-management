@@ -1,8 +1,9 @@
 import { InferRequestType, InferResponseType } from "hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { client } from "@/lib/rpc";
-import { toast } from "sonner";
 
 type ResponseType = InferResponseType<
   (typeof client.api.workspaces)[":workspaceId"]["$patch"]
@@ -11,9 +12,8 @@ type RequestType = InferRequestType<
   (typeof client.api.workspaces)[":workspaceId"]["$patch"]
 >;
 
-//todo: server or edit workspace is thworing unhandle error while mebmber role is tryping to edit workspace and make proper error handling for all
-
 export const useUpdateWorkspace = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
@@ -31,6 +31,7 @@ export const useUpdateWorkspace = () => {
     },
     onSuccess: ({ data }) => {
       toast.success("Edited successfully");
+      router.refresh();
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       queryClient.invalidateQueries({ queryKey: ["workspace", data.id] });
       //refetch  account key

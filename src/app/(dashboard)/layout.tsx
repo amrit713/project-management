@@ -19,7 +19,7 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
       <CreateProjectModal />
       <AppSidebar />
 
-      <main className="w-full">
+      <main className="w-full  px-[1rem]">
         <Navbar />
         {children}
       </main>

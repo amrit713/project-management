@@ -13,13 +13,13 @@ export const ProjectAvatar = ({
   className,
 }: ProjectAvatarProps) => {
   return (
-    <Avatar className={cn("rounded size-5", className)}>
+    <Avatar className={cn("rounded size-6", className)}>
       <AvatarImage
         src={image}
         alt={"workspace logo"}
         className="object-cover "
       />
-      <AvatarFallback className="bg-blue-600 rounded text-white font-semobold p-0 ">
+      <AvatarFallback className="bg-blue-600 rounded  text-white font-semobold p-0 ">
         {name[0].toUpperCase()}
       </AvatarFallback>
     </Avatar>
