@@ -24,8 +24,9 @@ model User {
   workspaces    Workspace[]
   members       Member[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Project   Project[]
 
   @@unique([email])
   @@map("user")
@@ -85,7 +86,8 @@ model Workspace {
   user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   inviteCode String  @unique
 
-  members Member[]
+  members  Member[]
+  projects Project[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -110,4 +112,20 @@ model Member {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          String  @id @default(uuid())
+  name        String
+  imageUrl    String?
+  workspaceId String
+
+  owner_id  String
+  owner     User      @relation(fields: [owner_id], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([workspaceId, name])
 }

@@ -20,7 +20,7 @@ import { Progress } from "@/components/ui/progress";
 interface FileUploadProps {
   onChange: (url?: string) => void;
   value: string;
-  endpoint: "workspaceImage";
+  endpoint: "workspaceImage" | "projectImage";
 }
 
 export const FileUpload = ({ onChange, endpoint, value }: FileUploadProps) => {

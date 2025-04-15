@@ -5,6 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PlusCircle } from "lucide-react";
 
+import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+
 import {
   Sidebar,
   SidebarGroup,
@@ -19,12 +22,13 @@ import { DottedSeperator } from "./dotted-separator";
 import { SIDEBAR_MENU_ITEM } from "@/constants";
 import { cn } from "@/lib/utils";
 import { WorkspaceSwitcher } from "./workspace-switcher";
-import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal";
-import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { Projects } from "./projects";
+import { useCreateProjectModal } from "@/features/projects/hooks/use-create-project-modal";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
-  const { open } = useCreateWorkspaceModal();
+  const { open: openWorkspaceModal } = useCreateWorkspaceModal();
+  const { open: openProjectModal } = useCreateProjectModal();
   const workspaceId = useWorkspaceId();
 
   return (
@@ -36,7 +40,7 @@ export const AppSidebar = () => {
       <SidebarGroup>
         <SidebarGroupLabel className=" flex items-center justify-between">
           <p className="uppercase text-neutral-500 text-sm">Workspaces</p>
-          <Button size={"icon"} variant={"ghost"} onClick={open}>
+          <Button size={"icon"} variant={"ghost"} onClick={openWorkspaceModal}>
             <PlusCircle />
           </Button>
         </SidebarGroupLabel>
@@ -77,6 +81,19 @@ export const AppSidebar = () => {
         </SidebarGroupContent>
       </SidebarGroup>
       <DottedSeperator className="my-1" />
+      <SidebarGroup>
+        <SidebarGroupLabel className="flex items-center justify-between">
+          <p className="uppercase text-neutral-500 text-sm">Projects</p>
+          <Button size={"icon"} variant={"ghost"} onClick={openProjectModal}>
+            <PlusCircle />
+          </Button>
+        </SidebarGroupLabel>
+        <SidebarGroupContent className="py-2">
+          <SidebarMenu>
+            <Projects />
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
     </Sidebar>
   );
 };

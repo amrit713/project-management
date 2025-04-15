@@ -230,9 +230,6 @@ const app = new Hono<{ Variables: Variables }>()
       },
     });
 
-    //TODO: project
-    //todo: server or edit workspace is thworing unhandle error while mebmber role is tryping to edit workspace and make proper error handling for all
-
     return c.json({
       data: workspace,
     });
