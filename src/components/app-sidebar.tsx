@@ -24,9 +24,13 @@ import { cn } from "@/lib/utils";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { Projects } from "./projects";
 import { useCreateProjectModal } from "@/features/projects/hooks/use-create-project-modal";
+import { useGetWorkspaces } from "@/features/workspaces/api/use-get-workspaces";
+import { Skeleton } from "./ui/skeleton";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
+
+  const { isPending } = useGetWorkspaces();
   const { open: openWorkspaceModal } = useCreateWorkspaceModal();
   const { open: openProjectModal } = useCreateProjectModal();
   const workspaceId = useWorkspaceId();
@@ -40,7 +44,12 @@ export const AppSidebar = () => {
       <SidebarGroup>
         <SidebarGroupLabel className=" flex items-center justify-between">
           <p className="uppercase text-neutral-500 text-sm">Workspaces</p>
-          <Button size={"icon"} variant={"ghost"} onClick={openWorkspaceModal}>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={openWorkspaceModal}
+            disabled={isPending}
+          >
             <PlusCircle />
           </Button>
         </SidebarGroupLabel>
@@ -64,16 +73,20 @@ export const AppSidebar = () => {
               const Icon = isActive ? item.activeIcon : item.icon;
               return (
                 <SidebarMenuItem key={item.label}>
-                  <Link
-                    href={fullHref}
-                    className={cn(
-                      "flex flex-items-center gap-2 py-3 px-2 hover:bg-white transition rounded font-medium hover:text-black text-neutral-500 ",
-                      isActive && "bg-white text-black "
-                    )}
-                  >
-                    <Icon className="size-5 text-neutral-500" />
-                    {item.label}
-                  </Link>
+                  {isPending ? (
+                    <Skeleton className="w-full h-11 bg-blue-100/50" />
+                  ) : (
+                    <Link
+                      href={fullHref}
+                      className={cn(
+                        "flex flex-items-center gap-2 py-3 px-2 hover:bg-white transition rounded font-medium hover:text-black text-neutral-500 ",
+                        isActive && "bg-white text-black "
+                      )}
+                    >
+                      <Icon className="size-5 text-neutral-500" />
+                      {item.label}
+                    </Link>
+                  )}
                 </SidebarMenuItem>
               );
             })}
@@ -84,7 +97,12 @@ export const AppSidebar = () => {
       <SidebarGroup>
         <SidebarGroupLabel className="flex items-center justify-between">
           <p className="uppercase text-neutral-500 text-sm">Projects</p>
-          <Button size={"icon"} variant={"ghost"} onClick={openProjectModal}>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={openProjectModal}
+            disabled={isPending}
+          >
             <PlusCircle />
           </Button>
         </SidebarGroupLabel>
