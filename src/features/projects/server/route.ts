@@ -148,6 +148,61 @@ const app = new Hono<{ Variables: Variables }>()
 
       return c.json({ data: updatedProject });
     }
+  )
+  .delete(
+    "/:projectId",
+    authMiddleware,
+
+    async (c) => {
+      const user = c.get("user");
+      if (!user) {
+        throw new HTTPException(401, { message: "unauthorized user" });
+      }
+
+      const { projectId } = c.req.param();
+
+      if (!projectId) {
+        throw new HTTPException(400, { message: "project not found" });
+      }
+
+      const existingProject = await db.project.findFirst({
+        where: {
+          id: projectId,
+        },
+      });
+
+      if (!existingProject) {
+        throw new HTTPException(404, { message: "project not found" });
+      }
+
+      const member = await db.member.findFirst({
+        where: {
+          userId: user.id,
+          workspaceId: existingProject.workspaceId,
+        },
+      });
+
+      //TODO: member can delete only the project they created and admin can delete every project
+
+      // if (!member || member.role !== MemberRole.ADMIN) {
+      //   throw new HTTPException(401, {
+      //     message: "You are not authorized to delete project",
+      //   });
+      // }
+
+      await db.project.delete({
+        where: {
+          id: projectId,
+        },
+      });
+
+      return c.json({
+        data: {
+          id: projectId,
+          workspaceId: existingProject.workspaceId,
+        },
+      });
+    }
   );
 
 export default app;
