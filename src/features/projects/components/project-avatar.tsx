@@ -17,9 +17,9 @@ export const ProjectAvatar = ({
       <AvatarImage
         src={image}
         alt={"workspace logo"}
-        className="object-cover "
+        className="object-cover  "
       />
-      <AvatarFallback className="bg-blue-600 rounded  text-white font-semobold p-0 ">
+      <AvatarFallback className=" rounded  text-white bg-emerald-700 font-semobold p-0 ">
         {name[0].toUpperCase()}
       </AvatarFallback>
     </Avatar>

@@ -97,7 +97,7 @@ export const EditProjectForm = ({
             {" "}
             <ArrowLeft className="size-4 mr-2" /> Back
           </Button>
-          <CardTitle className="font-bold text-xl">
+          <CardTitle className="font-bold text-xl ">
             {initialValues.name}
           </CardTitle>
         </CardHeader>
