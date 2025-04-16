@@ -1,4 +1,4 @@
-import { Pencil } from "lucide-react";
+import { Edit } from "lucide-react";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -47,7 +47,7 @@ async function ProjectIdPage({ params }: ProjectIdPageProps) {
           <Link
             href={`/workspaces/${initialValues.workspaceId}/projects/${initialValues.id}/settings`}
           >
-            <Pencil className="size-4 mr-2" />
+            <Edit className="size-4 mr-2" />
             Edit Project
           </Link>
         </Button>
