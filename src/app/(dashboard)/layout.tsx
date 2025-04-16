@@ -21,7 +21,7 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
 
       <main className="w-full  px-[1rem]">
         <Navbar />
-        {children}
+        <div className="mt-4">{children}</div>
       </main>
     </SidebarProvider>
   );
