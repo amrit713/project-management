@@ -5,13 +5,12 @@ import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { useProjectId } from "@/features/projects/hooks/use-project-id";
+
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 
 export const Projects = () => {
   const workspaceId = useWorkspaceId();
   const pathname = usePathname();
-  const projectId = useProjectId();
 
   const { data } = useGetProjects({ workspaceId });
   return (

@@ -27,6 +27,7 @@ import { useConfirm } from "@/hooks/use-confirm";
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { useDeleteProject } from "../api/use-delete-project";
 
 interface EditProjectFormProps {
   onCancel?: () => {};
@@ -39,8 +40,8 @@ export const EditProjectForm = ({
 }: EditProjectFormProps) => {
   const router = useRouter();
 
-  // const { mutate: deleteWorkspace, isPending: deletingWorksapce } =
-  //   useDeleteWorkspace();
+  const { mutate: deleteProject, isPending: isDeletingProject } =
+    useDeleteProject();
   const { mutate: editProject, isPending } = useUpdateProject();
 
   const [DeleteDialog, confirmDelete] = useConfirm(
@@ -59,10 +60,8 @@ export const EditProjectForm = ({
 
   const handleDelete = async () => {
     const ok = await confirmDelete();
-
     if (!ok) return;
-    //   deleteWorkspace({ param: { workspaceId: initialValues.id } });
-    // };
+    deleteProject({ param: { projectId: initialValues.id } });
   };
 
   const onSubmit = async (values: z.infer<typeof updateProjectSchema>) => {
@@ -185,7 +184,7 @@ export const EditProjectForm = ({
               className="mt-4 w-fit ml-auto"
               size={"sm"}
               variant={"destructive"}
-              disabled={isPending}
+              disabled={isPending || isDeletingProject}
               onClick={handleDelete}
             >
               Delete project{" "}

@@ -27,14 +27,5 @@ export const getProject = async ({
     throw new Error("No project found");
   }
 
-  const member = await db.member.findFirst({
-    where: {
-      userId: user.id,
-      workspaceId: project.workspaceId,
-    },
-  });
-
-  if (!member) throw new Error("you are not a member");
-
   return project;
 };
