@@ -74,7 +74,7 @@ export const AppSidebar = () => {
               return (
                 <SidebarMenuItem key={item.label}>
                   {isPending ? (
-                    <Skeleton className="w-full h-11 bg-blue-100/50" />
+                    <Skeleton className="w-full h-11 bg-primary/10" />
                   ) : (
                     <Link
                       href={fullHref}
