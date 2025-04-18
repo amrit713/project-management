@@ -8,6 +8,7 @@ import { Navbar } from "@/components/navbar";
 import { CreateWorkspaceModal } from "@/features/workspaces/components/create-workspace-modal";
 
 import { CreateProjectModal } from "@/features/projects/components/create-project-modal";
+import { CreateTaskModal } from "@/features/tasks/components/create-task-modal";
 
 async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await currentUser();
@@ -17,6 +18,7 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <CreateWorkspaceModal />
       <CreateProjectModal />
+      <CreateTaskModal />
       <AppSidebar />
 
       <main className="w-full  px-[1rem]">
