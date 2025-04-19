@@ -91,7 +91,6 @@ model Workspace {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Task      Task[]
 
   @@unique([userId, name])
 }
@@ -127,33 +126,6 @@ model Project {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Task      Task[]
 
   @@unique([workspaceId, name])
-}
-
-enum TaskStatus {
-  BACKLOG
-  TODO
-  IN_PROGRESS
-  IN_REVIEW
-  DONE
-}
-
-model Task {
-  id          String     @id @default(uuid())
-  name        String
-  assigneeId  String
-  description String?
-  dueDate     DateTime
-  status      TaskStatus
-  position    Int //minx:1000, max: 1000000
-
-  workspaceId String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  projectId   String
-  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
