@@ -235,7 +235,6 @@ export const CreateTaskForm = ({
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      required
                       disabled={isPending}
                       placeholder="Description of task"
                       {...field}
