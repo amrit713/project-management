@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { DottedSeperator } from "@/components/dotted-separator";
 import { useCreateTaskModal } from "../hooks/use-create-task-modal";
+import { DataFilters } from "./data-filters";
 
 export const TaskViewSwitcher = () => {
   const { open } = useCreateTaskModal();
@@ -32,7 +33,7 @@ export const TaskViewSwitcher = () => {
         </div>
         <DottedSeperator className="my-4" />
         {/* TODO: add filters */}
-        Data filter
+        <DataFilters />
         <DottedSeperator className="my-4" />
         <>
           <TabsContent className="mt-0" value="table">
