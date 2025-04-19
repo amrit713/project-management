@@ -172,7 +172,7 @@ const app = new Hono<{ Variables: Variables }>()
 
       const task = await db.task.create({
         data: {
-          name,
+          name: name.toLocaleLowerCase(),
           workspaceId,
           projectId,
           assigneeId,
