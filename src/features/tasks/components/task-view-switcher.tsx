@@ -31,7 +31,7 @@ export const TaskViewSwitcher = () => {
   });
   return (
     <Tabs
-      className="flex-1 w-full border rounded-lg"
+      className="flex-1 w-full border rounded-lg "
       defaultValue={view}
       onValueChange={setView}
     >
