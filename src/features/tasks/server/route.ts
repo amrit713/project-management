@@ -34,8 +34,6 @@ const app = new Hono<{ Variables: Variables }>()
     const { workspaceId, projectId, assigneeId, status, search, dueDate } =
       c.req.valid("query");
 
-    console.log(`🚀 ~ .get ~ c.req.valid("query"):`, c.req.valid("query"));
-
     const member = await db.member.findFirst({
       where: {
         userId: user.id,
@@ -157,6 +155,69 @@ const app = new Hono<{ Variables: Variables }>()
       return c.json({ data: task });
     }
   )
+  .patch(
+    "/:taskId",
+    authMiddleware,
+    zValidator("json", createTaskSchema.partial()),
+    async (c) => {
+      const user = c.get("user");
+      const { taskId } = c.req.param();
+
+      if (!user) {
+        throw new HTTPException(401, { message: "Unauthorized" });
+      }
+
+      const {
+        name,
+        assigneeId,
+        workspaceId,
+        description,
+        status,
+        projectId,
+        dueDate,
+      } = c.req.valid("json");
+
+      const existingTask = await db.task.findFirst({
+        where: {
+          id: taskId,
+        },
+      });
+
+      if (!existingTask) {
+        throw new HTTPException(404, { message: "task not found" });
+      }
+
+      const member = await db.member.findFirst({
+        where: {
+          userId: user.id,
+          workspaceId: existingTask.workspaceId,
+        },
+      });
+
+      if (!member) {
+        throw new HTTPException(401, {
+          message: "You are not a member of this workspace",
+        });
+      }
+
+      const task = await db.task.update({
+        where: {
+          id: taskId,
+        },
+        data: {
+          name,
+          workspaceId,
+          projectId,
+          assigneeId,
+          description,
+          status,
+          dueDate,
+        },
+      });
+
+      return c.json({ data: task });
+    }
+  )
   .delete("/:taskId", authMiddleware, async (c) => {
     const user = c.get("user");
 
@@ -200,6 +261,44 @@ const app = new Hono<{ Variables: Variables }>()
       data: {
         id: task.id,
       },
+    });
+  })
+  .get("/:taskId", authMiddleware, async (c) => {
+    const user = c.get("user");
+
+    if (!user) {
+      throw new HTTPException(401, { message: "Unauthorized" });
+    }
+
+    const { taskId } = c.req.param();
+
+    const task = await db.task.findFirst({
+      where: {
+        id: taskId,
+      },
+      include: {
+        project: true,
+        assignee: {
+          select: {
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!task) {
+      throw new HTTPException(404, {
+        message: "Task not found with this id",
+      });
+    }
+
+    return c.json({
+      data: task,
     });
   });
 

@@ -10,3 +10,8 @@ export const createTaskSchema = z.object({
   assigneeId: z.string().trim().min(1, "Required"),
   description: z.string().optional(),
 });
+
+export const editTaskSchema = createTaskSchema.omit({
+  workspaceId: true,
+  description: true,
+});

@@ -9,6 +9,7 @@ import { CreateWorkspaceModal } from "@/features/workspaces/components/create-wo
 
 import { CreateProjectModal } from "@/features/projects/components/create-project-modal";
 import { CreateTaskModal } from "@/features/tasks/components/create-task-modal";
+import { EditTaskModal } from "@/features/tasks/components/edit-task-modal";
 
 async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await currentUser();
@@ -19,6 +20,7 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
       <CreateWorkspaceModal />
       <CreateProjectModal />
       <CreateTaskModal />
+      <EditTaskModal />
       <AppSidebar />
 
       <main className="w-full  px-[1rem]">
