@@ -21,7 +21,7 @@ const buttonVariants = cva(
           " hover:bg-[#F4F5F7] hover:text-accent-foreground dark:hover:bg-accent/50 border-transparent border-transparent shadow-none",
         muted: "bg-[#EBECF0] text-neutral-600 hover:bg-[#EBECF0]/80",
         teritrary:
-          "bg-violet-50 text-[#0052CC] hover:bg-violet-100 border-transparent shadow-none",
+          "bg-primary/10 text-primary hover:bg-primary/20 border-transparent shadow-none",
       },
       size: {
         default: "h-10 px-4 py-2 has-[>svg]:px-3",

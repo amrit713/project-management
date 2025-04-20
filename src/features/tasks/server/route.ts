@@ -65,58 +65,31 @@ const app = new Hono<{ Variables: Variables }>()
             }
           : undefined,
       },
-    });
-
-    const projectIds = tasks.map((task) => task.projectId);
-    const assigneeIds = tasks.map((task) => task.assigneeId);
-
-    const projects = await db.project.findMany({
-      where: {
-        id: {
-          in: projectIds,
-        },
-      },
-    });
-
-    const members = await db.member.findMany({
-      where: {
-        id: {
-          in: assigneeIds,
-        },
-      },
-    });
-
-    const assignees = await db.user.findMany({
-      where: {
-        id: {
-          in: members.map((member) => member.userId),
-        },
-      },
       include: {
-        members: true,
+        project: {
+          select: {
+            name: true,
+            id: true,
+            imageUrl: true,
+          },
+        },
+        assignee: {
+          select: {
+            id: true,
+            role: true,
+
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
-    });
-
-    const populatedTasks = tasks.map((task) => {
-      const project = projects.find((project) => {
-        return project.id === task.projectId;
-      });
-
-      console.log("🚀 ~ populatedTasks ~ project:", project);
-      const assignee = assignees.find(
-        (assignee) => assignee.id === task.assigneeId
-      );
-
-      return {
-        ...task,
-        project,
-        assignee,
-      };
     });
 
     return c.json({
       data: tasks,
-      documents: populatedTasks,
     });
   })
   .post(
@@ -163,7 +136,6 @@ const app = new Hono<{ Variables: Variables }>()
         },
         take: 1,
       });
-      console.log("🚀 ~ higestPositionTask:", higestPositionTask);
 
       const newPostion =
         higestPositionTask.length > 0
