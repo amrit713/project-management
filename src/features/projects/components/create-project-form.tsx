@@ -115,7 +115,7 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
               )}
             />
 
-            <div className="px-6">
+            <div>
               <DottedSeperator className="py-6" />
 
               <div className="flex items-center  gap-4 ">

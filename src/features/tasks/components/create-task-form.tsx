@@ -80,16 +80,16 @@ export const CreateTaskForm = ({
       className="w-full h-full border-none shadow-none
   "
     >
-      <CardHeader className="flex px-6 py-4">
+      <CardHeader className="flex p-6">
         <CardTitle className="font-bold text-xl">Create a new Task</CardTitle>
       </CardHeader>
       <div className="px-6">
-        <DottedSeperator className="py-4" />
+        <DottedSeperator className="py-6" />
         <Form {...form}>
           <form
             action=""
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-4"
           >
             <FormField
               control={form.control}
@@ -227,7 +227,7 @@ export const CreateTaskForm = ({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="description"
               render={({ field }) => (
@@ -244,12 +244,12 @@ export const CreateTaskForm = ({
                   </FormControl>
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <div className="px-6">
+            <div className="">
               <DottedSeperator className="py-6" />
 
-              <div className="flex items-center  gap-4 ">
+              <div className="flex items-center    gap-4 ">
                 <Button
                   variant={"secondary"}
                   type="button"

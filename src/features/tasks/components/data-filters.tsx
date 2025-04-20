@@ -16,9 +16,6 @@ import { Folder, ListChecksIcon, ListTodo, Search, User } from "lucide-react";
 import { SelectValue } from "@radix-ui/react-select";
 import { TaskStatus } from "@prisma/client";
 import { useTaskFilters } from "../hooks/use-task-filters";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 interface DataFiltersProps {
   hideProjectFilter?: boolean;
@@ -26,7 +23,6 @@ interface DataFiltersProps {
 
 export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
   // TODO: need to add search functionality later on the basic of reqirement
-  // const [searchValue, setSearchValue] = useState<string>();
 
   const workspaceId = useWorkspaceId();
   const { data: projects, isLoading: isLoadingProjects } = useGetProjects({
@@ -72,10 +68,6 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
       setFilters({ projectId: value });
     }
   };
-
-  // const onSearchSubmit = (value: string | undefined) => {
-  //   setFilters({ search: value });
-  // };
 
   if (isLoading) {
     return null;
@@ -160,25 +152,6 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
           setFilters({ dueDate: date ? date.toISOString() : null })
         }
       />
-
-      {/* <div className="relative">
-        <ListTodo className="size-4 ml-2 text-muted-foreground absolute inset-0 top-[50%] -translate-y-[50%] " />
-        <Input
-          className="px-8 "
-          placeholder="Search a tasks"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-
-        />
-        <Button
-          onClick={() => onSearchSubmit(searchValue)}
-          className="absolute right-1 top-[50%] -translate-y-[50%] "
-          size={"icon"}
-          variant="teritrary"
-        >
-          <Search className="size-4" />
-        </Button>
-      </div> */}
     </div>
   );
 };
