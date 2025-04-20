@@ -8,7 +8,6 @@ import { authMiddleware } from "@/lib/hono-middleware";
 import { createTaskSchema } from "../schema";
 import { db } from "@/lib/db";
 import { TaskStatus } from "@prisma/client";
-import { task } from "better-auth/react";
 
 const filterSchema = z.object({
   workspaceId: z.string(),
@@ -157,6 +156,51 @@ const app = new Hono<{ Variables: Variables }>()
 
       return c.json({ data: task });
     }
-  );
+  )
+  .delete("/:taskId", authMiddleware, async (c) => {
+    const user = c.get("user");
+
+    if (!user) {
+      throw new HTTPException(401, { message: "Unauthorized" });
+    }
+
+    const { taskId } = c.req.param();
+
+    const task = await db.task.findUnique({
+      where: {
+        id: taskId,
+      },
+    });
+
+    if (!task) {
+      throw new HTTPException(404, {
+        message: "Task not found with this id",
+      });
+    }
+
+    const member = await db.member.findFirst({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    if (!member) {
+      throw new HTTPException(401, {
+        message: "You are not allow to delete this task ",
+      });
+    }
+
+    await db.task.delete({
+      where: {
+        id: taskId,
+      },
+    });
+
+    return c.json({
+      data: {
+        id: task.id,
+      },
+    });
+  });
 
 export default app;

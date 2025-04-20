@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useConfirm } from "@/hooks/use-confirm";
+import { cn, snakeCaseToTitleCase } from "@/lib/utils";
 
 export const MembersList = () => {
   const workspaceId = useWorkspaceId();
@@ -99,8 +100,10 @@ export const MembersList = () => {
                             <ShieldCheck className="size-4 text-primary" />
                           )}
                         </TooltipTrigger>
-                        <TooltipContent className="">
-                          <p className="text-xs">{member.role}</p>
+                        <TooltipContent>
+                          <p className="text-xs">
+                            {snakeCaseToTitleCase(member.role)}
+                          </p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>

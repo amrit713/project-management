@@ -64,7 +64,7 @@ export const columns: ColumnDef<TaskType>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Project
+          Assignee
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
