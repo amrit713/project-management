@@ -263,43 +263,55 @@ const app = new Hono<{ Variables: Variables }>()
       },
     });
   })
-  .get("/:taskId", authMiddleware, async (c) => {
-    const user = c.get("user");
+  .get(
+    "/:taskId",
+    authMiddleware,
+    zValidator(
+      "query",
+      z.object({
+        workspaceId: z.string(),
+      })
+    ),
+    async (c) => {
+      const user = c.get("user");
 
-    if (!user) {
-      throw new HTTPException(401, { message: "Unauthorized" });
-    }
+      if (!user) {
+        throw new HTTPException(401, { message: "Unauthorized" });
+      }
 
-    const { taskId } = c.req.param();
+      const { taskId } = c.req.param();
+      const { workspaceId } = c.req.valid("query");
 
-    const task = await db.task.findFirst({
-      where: {
-        id: taskId,
-      },
-      include: {
-        project: true,
-        assignee: {
-          select: {
-            user: {
-              select: {
-                name: true,
-                email: true,
+      const task = await db.task.findFirst({
+        where: {
+          id: taskId,
+          workspaceId,
+        },
+        include: {
+          project: true,
+          assignee: {
+            select: {
+              user: {
+                select: {
+                  name: true,
+                  email: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      });
 
-    if (!task) {
-      throw new HTTPException(404, {
-        message: "Task not found with this id",
+      if (!task) {
+        throw new HTTPException(404, {
+          message: "Task not found with this id",
+        });
+      }
+
+      return c.json({
+        data: task,
       });
     }
-
-    return c.json({
-      data: task,
-    });
-  });
+  );
 
 export default app;

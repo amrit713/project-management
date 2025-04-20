@@ -4,14 +4,16 @@ import { useQuery } from "@tanstack/react-query";
 
 interface UseGetTaskProps {
   taskId: string;
+  workspaceId: string;
 }
 
-export const useGetTask = ({ taskId }: UseGetTaskProps) => {
+export const useGetTask = ({ taskId, workspaceId }: UseGetTaskProps) => {
   const query = useQuery({
     queryKey: ["task", taskId],
     queryFn: async () => {
       const response = await client.api.tasks[":taskId"]["$get"]({
         param: { taskId },
+        query: { workspaceId },
       });
 
       if (!response.ok) {
