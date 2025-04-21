@@ -14,6 +14,7 @@ import { useTaskFilters } from "../hooks/use-task-filters";
 import { useQueryState } from "nuqs";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
+import { DataKanban } from "./data-kanban";
 
 export const TaskViewSwitcher = () => {
   const [{ status, assigneeId, projectId, dueDate }] = useTaskFilters();
@@ -67,7 +68,7 @@ export const TaskViewSwitcher = () => {
               <DataTable columns={columns} data={tasks ?? []} />
             </TabsContent>
             <TabsContent className="mt-0" value="kanban">
-              Data kanban
+              <DataKanban data={tasks ?? []} />
             </TabsContent>
             <TabsContent className="mt-0" value="calendar">
               Data calendar

@@ -19,8 +19,6 @@ export const Projects = () => {
         const isActive =
           pathname === `/workspaces/${workspaceId}/projects/${project.id}`;
 
-        console.log(isActive, pathname);
-
         return (
           <Link
             href={`/workspaces/${workspaceId}/projects/${project.id}`}
