@@ -18,8 +18,15 @@ import { DataKanban } from "./data-kanban";
 import { TaskStatus } from "@prisma/client";
 import { useBulkUpdateTask } from "../api/use-bulk-update-task";
 import { DataCalendar } from "./data-calendar";
+import { useProjectId } from "@/features/projects/hooks/use-project-id";
 
-export const TaskViewSwitcher = () => {
+interface TaskViewSwitcherProps {
+  hideProjectFilter?: boolean;
+}
+
+export const TaskViewSwitcher = ({
+  hideProjectFilter,
+}: TaskViewSwitcherProps) => {
   const { mutate: bulkUpdate } = useBulkUpdateTask();
   const [{ status, assigneeId, projectId, dueDate }] = useTaskFilters();
   const [view, setView] = useQueryState("task-view", {
@@ -27,18 +34,17 @@ export const TaskViewSwitcher = () => {
   });
   const { open } = useCreateTaskModal();
   const workspaceId = useWorkspaceId();
+  const projectIdParam = useProjectId();
   const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({
     workspaceId,
     status,
     assigneeId,
-    projectId,
+    projectId: projectIdParam ? projectIdParam : projectId,
     dueDate,
   });
 
   const onKanbanChange = useCallback(
     (tasks: { id: string; status: TaskStatus; position: number }[]) => {
-      console.log("🚀 ~ TaskViewSwitcher ~ tasks:", tasks);
-
       bulkUpdate({
         json: [...tasks],
       });
@@ -71,7 +77,7 @@ export const TaskViewSwitcher = () => {
         </div>
         <DottedSeperator className="my-4" />
 
-        <DataFilters />
+        <DataFilters hideProjectFilter={hideProjectFilter} />
         <DottedSeperator className="my-4" />
         {isLoadingTasks ? (
           <div className="w-full flex justify-center items-center rounded h-[200px] flex-col">
