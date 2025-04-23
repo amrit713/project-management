@@ -17,6 +17,7 @@ import { columns } from "./columns";
 import { DataKanban } from "./data-kanban";
 import { TaskStatus } from "@prisma/client";
 import { useBulkUpdateTask } from "../api/use-bulk-update-task";
+import { DataCalendar } from "./data-calendar";
 
 export const TaskViewSwitcher = () => {
   const { mutate: bulkUpdate } = useBulkUpdateTask();
@@ -69,7 +70,7 @@ export const TaskViewSwitcher = () => {
           </Button>
         </div>
         <DottedSeperator className="my-4" />
-        {/* TODO: add filters */}
+
         <DataFilters />
         <DottedSeperator className="my-4" />
         {isLoadingTasks ? (
@@ -84,8 +85,8 @@ export const TaskViewSwitcher = () => {
             <TabsContent className="mt-0" value="kanban">
               <DataKanban data={tasks ?? []} onChange={onKanbanChange} />
             </TabsContent>
-            <TabsContent className="mt-0" value="calendar">
-              Data calendar
+            <TabsContent className="mt-0 h-full " value="calendar">
+              <DataCalendar data={tasks ?? []} />
             </TabsContent>
           </>
         )}
