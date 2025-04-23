@@ -342,12 +342,10 @@ const app = new Hono<{ Variables: Variables }>()
           },
         },
       });
-      console.log("🚀 ~ tasksToUpdate:", tasksToUpdate);
 
       const workspaceIds = new Set(
         tasksToUpdate.map((task) => task.workspaceId)
       );
-      console.log("🚀 ~ workspaceIds:", workspaceIds);
 
       if (workspaceIds.size !== 1) {
         throw new HTTPException(401, {

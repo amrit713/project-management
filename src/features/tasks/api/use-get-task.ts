@@ -21,7 +21,6 @@ export const useGetTask = ({ taskId, workspaceId }: UseGetTaskProps) => {
       }
       const { data } = await response.json();
 
-      console.log("🚀 ~ queryFn: ~ data:", data);
       return data;
     },
   });

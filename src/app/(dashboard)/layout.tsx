@@ -23,9 +23,9 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
       <EditTaskModal />
       <AppSidebar />
 
-      <main className="w-full  px-[1rem]">
+      <main className="w-full   px-[1rem]">
         <Navbar />
-        <div className="mt-4">{children}</div>
+        <div className="mt-4 h-[calc(100vh-6rem)] ">{children}</div>
       </main>
     </SidebarProvider>
   );
