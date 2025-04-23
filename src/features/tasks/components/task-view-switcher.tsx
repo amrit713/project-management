@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,12 @@ import { useTaskFilters } from "../hooks/use-task-filters";
 import { useQueryState } from "nuqs";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
+import { DataKanban } from "./data-kanban";
+import { TaskStatus } from "@prisma/client";
+import { useBulkUpdateTask } from "../api/use-bulk-update-task";
 
 export const TaskViewSwitcher = () => {
+  const { mutate: bulkUpdate } = useBulkUpdateTask();
   const [{ status, assigneeId, projectId, dueDate }] = useTaskFilters();
   const [view, setView] = useQueryState("task-view", {
     defaultValue: "table",
@@ -29,6 +33,17 @@ export const TaskViewSwitcher = () => {
     projectId,
     dueDate,
   });
+
+  const onKanbanChange = useCallback(
+    (tasks: { id: string; status: TaskStatus; position: number }[]) => {
+      console.log("🚀 ~ TaskViewSwitcher ~ tasks:", tasks);
+
+      bulkUpdate({
+        json: [...tasks],
+      });
+    },
+    [bulkUpdate]
+  );
   return (
     <Tabs
       className="flex-1 w-full border rounded-lg "
@@ -67,7 +82,7 @@ export const TaskViewSwitcher = () => {
               <DataTable columns={columns} data={tasks ?? []} />
             </TabsContent>
             <TabsContent className="mt-0" value="kanban">
-              Data kanban
+              <DataKanban data={tasks ?? []} onChange={onKanbanChange} />
             </TabsContent>
             <TabsContent className="mt-0" value="calendar">
               Data calendar

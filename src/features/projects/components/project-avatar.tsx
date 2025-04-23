@@ -5,12 +5,14 @@ interface ProjectAvatarProps {
   image?: string;
   name: string;
   className?: string;
+  fallbackClass?: string;
 }
 
 export const ProjectAvatar = ({
   image,
   name,
   className,
+  fallbackClass,
 }: ProjectAvatarProps) => {
   return (
     <Avatar className={cn("rounded size-6", className)}>
@@ -19,7 +21,12 @@ export const ProjectAvatar = ({
         alt={"workspace logo"}
         className="object-cover  "
       />
-      <AvatarFallback className=" rounded  text-white bg-emerald-700 font-semobold p-0 ">
+      <AvatarFallback
+        className={cn(
+          " rounded  text-white bg-emerald-700 font-semobold p-0 ",
+          fallbackClass
+        )}
+      >
         {name[0].toUpperCase()}
       </AvatarFallback>
     </Avatar>

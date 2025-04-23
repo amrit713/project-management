@@ -203,6 +203,42 @@ const app = new Hono<{ Variables: Variables }>()
         },
       });
     }
-  );
+  )
+  .get("/:projectId", authMiddleware, async (c) => {
+    const user = c.get("user");
+
+    if (!user) {
+      throw new HTTPException(401, { message: "unauthorized user" });
+    }
+
+    const { projectId } = c.req.param();
+
+    if (!projectId) {
+      throw new HTTPException(400, { message: "project not found" });
+    }
+
+    const project = await db.project.findUnique({
+      where: {
+        id: projectId,
+      },
+    });
+
+    if (!project) {
+      throw new HTTPException(404, { message: "project not found" });
+    }
+
+    const member = await db.member.findFirst({
+      where: {
+        userId: user.id,
+        workspaceId: project.workspaceId,
+      },
+    });
+
+    if (!member) {
+      throw new HTTPException(401, { message: "unauthorized" });
+    }
+
+    return c.json({ data: project });
+  });
 
 export default app;

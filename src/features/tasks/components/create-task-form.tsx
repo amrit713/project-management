@@ -33,9 +33,11 @@ import {
 } from "@/components/ui/select";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
 import { TaskStatus } from "@prisma/client";
+
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
-import { Textarea } from "@/components/ui/textarea";
 import { useCreateTaskModal } from "../hooks/use-create-task-modal";
+import { useStatus } from "../hooks/use-status";
+import { useProjectId } from "@/features/projects/hooks/use-project-id";
 
 interface CreateTaskFormProps {
   onCancel?: () => void;
@@ -50,7 +52,9 @@ export const CreateTaskForm = ({
 }: CreateTaskFormProps) => {
   const router = useRouter();
   const workspaceId = useWorkspaceId();
+  const projectId = useProjectId();
   const { close } = useCreateTaskModal();
+  const [status] = useStatus();
 
   const { mutate: createProject, isPending } = useCreateTask();
 
@@ -58,6 +62,8 @@ export const CreateTaskForm = ({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
       workspaceId,
+      status: status as TaskStatus,
+      projectId,
     },
   });
 
@@ -207,6 +213,7 @@ export const CreateTaskForm = ({
                     </FormControl>
                     <FormMessage />
                     <SelectContent>
+                      {/* todo default select project */}
                       {projectOptions.map((project) => (
                         <SelectItem key={project.id} value={project.id}>
                           <div className="flex items-center gap-x-2 text-neutral-800">
