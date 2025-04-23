@@ -312,6 +312,77 @@ const app = new Hono<{ Variables: Variables }>()
         data: task,
       });
     }
+  )
+  .post(
+    "/bulk-update",
+    authMiddleware,
+    zValidator(
+      "json",
+
+      z.array(
+        z.object({
+          id: z.string(),
+          status: z.nativeEnum(TaskStatus),
+          position: z.number().positive().min(1000).max(1_000_000),
+        })
+      )
+    ),
+    async (c) => {
+      const user = c.get("user");
+      if (!user) {
+        throw new HTTPException(401, { message: "Unauthorized" });
+      }
+
+      const tasks = c.req.valid("json");
+
+      const tasksToUpdate = await db.task.findMany({
+        where: {
+          id: {
+            in: tasks.map((task) => task.id),
+          },
+        },
+      });
+      console.log("🚀 ~ tasksToUpdate:", tasksToUpdate);
+
+      const workspaceIds = new Set(
+        tasksToUpdate.map((task) => task.workspaceId)
+      );
+      console.log("🚀 ~ workspaceIds:", workspaceIds);
+
+      if (workspaceIds.size !== 1) {
+        throw new HTTPException(401, {
+          message: "All task must belong to same workspace",
+        });
+      }
+
+      const workspaceId = workspaceIds.values().next().value;
+
+      const member = await db.member.findFirst({
+        where: {
+          workspaceId,
+          userId: user.id,
+        },
+      });
+
+      if (!member) {
+        throw new HTTPException(401, { message: "Unauthorized" });
+      }
+      const upatedTasks = await Promise.all(
+        tasks.map((task) =>
+          db.task.update({
+            where: {
+              id: task.id,
+            },
+            data: {
+              status: task.status,
+              position: task.position,
+            },
+          })
+        )
+      );
+
+      return c.json({ data: upatedTasks });
+    }
   );
 
 export default app;

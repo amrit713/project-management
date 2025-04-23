@@ -5,3 +5,4 @@ adding feature concept -->
 
 - add kota table in database and uprade feature
 - add search functionality
+  -modify by default value in status in task create page
