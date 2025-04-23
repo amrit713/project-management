@@ -32,7 +32,8 @@ export const EventCard = ({
   const router = useRouter();
 
   const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation(), router.push(`/workspaces/${workspaceId}/tasks/${id}`);
+    e.stopPropagation();
+    router.push(`/workspaces/${workspaceId}/tasks/${id}`);
   };
   return (
     <div className="px-2">
