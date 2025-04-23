@@ -20,9 +20,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { useCreateTask } from "../api/use-create-task";
 import { cn } from "@/lib/utils";
-import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+
 import { DatePicker } from "@/components/date-picker";
 import {
   Select,
@@ -74,7 +73,6 @@ export const EditTaskForm = ({
       { json: { ...values }, param: { taskId: initialValues.id } },
       {
         onSuccess: ({ data }) => {
-          form.reset();
           close();
           //TODO: redirect to new task
         },
