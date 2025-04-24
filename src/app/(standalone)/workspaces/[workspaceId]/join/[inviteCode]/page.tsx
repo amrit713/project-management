@@ -18,7 +18,6 @@ const WorkspaceIdJoinPage = async ({ params }: WorkspaceIdJoinPageProps) => {
   }
 
   const { workspaceId } = await params;
-  console.log("🚀 ~ WorkspaceIdJoinPage ~ worksapceId:", workspaceId);
 
   const workspace = await getWorkspaceInfo(workspaceId);
   if (!workspace) redirect("/");
