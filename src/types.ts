@@ -1,4 +1,4 @@
-import { MemberRole, Project, Task } from "@prisma/client";
+import { Member, MemberRole, Project, Task } from "@prisma/client";
 
 export type TaskType = Omit<Task, "dueDate" | "createdAt" | "updatedAt"> & {
   project: {
@@ -18,9 +18,18 @@ export type TaskType = Omit<Task, "dueDate" | "createdAt" | "updatedAt"> & {
   updatedAt: string;
 };
 
-type ProjectType = Omit<Project, "createdAt" | "updatedAt"> & {
+export type ProjectType = Omit<Project, "createdAt" | "updatedAt"> & {
   createdAt: string;
   updatedAt: string;
+};
+
+export type MemberType = Omit<Member, "createdAt" | "updatedAt"> & {
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    name: string;
+    email: string;
+  };
 };
 
 export interface EditTask

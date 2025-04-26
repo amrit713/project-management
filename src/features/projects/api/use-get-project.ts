@@ -18,6 +18,8 @@ export const useGetProject = ({ projectId }: UseGetProjectProps) => {
       }
       const { data } = await response.json();
 
+      console.log("🚀 ~ queryFn: ~ data:", data);
+
       return data;
     },
   });

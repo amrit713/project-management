@@ -2,8 +2,9 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { MemberRole } from "@prisma/client";
+import { MemberRole, TaskStatus } from "@prisma/client";
 import { Session, User } from "better-auth";
+import { endOfMonth, startOfMonth, subMonths } from "date-fns";
 
 import { updateWorkspaceSchema, workspaceSchema } from "../schema";
 import { authMiddleware } from "@/lib/hono-middleware";
@@ -281,6 +282,187 @@ const app = new Hono<{ Variables: Variables }>()
 
       return c.json({ data: workspace });
     }
-  );
+  )
+  .get("/:workspaceId/analytics", authMiddleware, async (c) => {
+    const user = c.get("user");
+    const { workspaceId } = c.req.param();
+
+    if (!user) {
+      throw new HTTPException(401, { message: "unauthorized user" });
+    }
+
+    const member = await db.member.findFirst({
+      where: {
+        workspaceId,
+        userId: user.id,
+      },
+    });
+
+    if (!member) {
+      throw new HTTPException(401, { message: "unauthorized" });
+    }
+
+    const now = new Date();
+    const thisMonthStart = startOfMonth(now);
+    const thisMonthEnd = endOfMonth(now);
+    const lastMonthStart = startOfMonth(subMonths(now, 1));
+    const lastMonthEnd = endOfMonth(subMonths(now, 1));
+
+    //total task count in this project
+    const thisMonthTasksCount = await db.task.count({
+      where: {
+        workspaceId,
+        createdAt: {
+          lte: thisMonthEnd,
+          gte: thisMonthStart,
+        },
+      },
+    });
+
+    const lastMonthTasksCount = await db.task.count({
+      where: {
+        workspaceId,
+        createdAt: {
+          lte: lastMonthEnd,
+          gte: lastMonthStart,
+        },
+      },
+    });
+
+    const taskDifference = thisMonthTasksCount - lastMonthTasksCount;
+
+    // assigned task count
+    const thisMonthAssignedTasksCount = await db.task.count({
+      where: {
+        workspaceId,
+        assigneeId: member.id,
+        createdAt: {
+          lte: thisMonthEnd,
+          gte: thisMonthStart,
+        },
+      },
+    });
+    const lastMonthAssignedTasksCount = await db.task.count({
+      where: {
+        workspaceId,
+        assigneeId: member.id,
+        createdAt: {
+          lte: lastMonthEnd,
+          gte: lastMonthStart,
+        },
+      },
+    });
+
+    const assignedTaskDifference =
+      thisMonthAssignedTasksCount - lastMonthAssignedTasksCount;
+
+    //this month incomplete task
+    const thisMonthIncompleteTasksCount = await db.task.count({
+      where: {
+        workspaceId,
+        status: {
+          not: TaskStatus.DONE,
+        },
+        createdAt: {
+          lte: thisMonthEnd,
+          gte: thisMonthStart,
+        },
+      },
+    });
+    const lastMonthIncompleteTasksCount = await db.task.count({
+      where: {
+        workspaceId,
+        status: {
+          not: TaskStatus.DONE,
+        },
+        createdAt: {
+          lte: lastMonthEnd,
+          gte: lastMonthStart,
+        },
+      },
+    });
+
+    const incompleteTaskDifference =
+      thisMonthIncompleteTasksCount - lastMonthIncompleteTasksCount;
+
+    // complete task count
+    const thisMonthCompleteTasksCount = await db.task.count({
+      where: {
+        workspaceId,
+        status: {
+          equals: TaskStatus.DONE,
+        },
+        createdAt: {
+          lte: thisMonthEnd,
+          gte: thisMonthStart,
+        },
+      },
+    });
+    const lastMonthCompleteTasksCount = await db.task.count({
+      where: {
+        workspaceId,
+        status: {
+          equals: TaskStatus.DONE,
+        },
+        createdAt: {
+          lte: lastMonthEnd,
+          gte: lastMonthStart,
+        },
+      },
+    });
+
+    const completedTaskDifference =
+      thisMonthCompleteTasksCount - lastMonthCompleteTasksCount;
+
+    // over deu task
+    const thisMonthOverdueTasksCount = await db.task.count({
+      where: {
+        workspaceId,
+        status: {
+          not: TaskStatus.DONE,
+        },
+        dueDate: {
+          lt: now,
+        },
+        createdAt: {
+          lte: thisMonthEnd,
+          gte: thisMonthStart,
+        },
+      },
+    });
+    const lastMonthOverdueTasksCount = await db.task.count({
+      where: {
+        workspaceId,
+        status: {
+          not: TaskStatus.DONE,
+        },
+        dueDate: {
+          lt: now,
+        },
+        createdAt: {
+          lte: lastMonthEnd,
+          gte: lastMonthStart,
+        },
+      },
+    });
+
+    const overdueTaskDifference =
+      thisMonthOverdueTasksCount - lastMonthOverdueTasksCount;
+
+    return c.json({
+      data: {
+        taskCount: thisMonthTasksCount,
+        taskDifference,
+        assignTaskCount: thisMonthAssignedTasksCount,
+        assignedTaskDifference,
+        completedTaskCount: thisMonthCompleteTasksCount,
+        completedTaskDifference,
+        incompletedTaskCount: thisMonthIncompleteTasksCount,
+        incompleteTaskDifference,
+        overdueTaskCount: thisMonthOverdueTasksCount,
+        overdueTaskDifference,
+      },
+    });
+  });
 
 export default app;
