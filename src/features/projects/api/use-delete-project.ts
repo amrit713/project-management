@@ -32,7 +32,9 @@ export const useDeleteProject = () => {
       toast.success("Project delete");
       router.push(`/workspaces/${ctx.data.workspaceId}`);
       router.refresh();
-      queryClient.invalidateQueries({ queryKey: ["projects"] }); //refetch  account key
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({ queryKey: ["project-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-analytics"] }); //refetch  account key
     },
 
     onError: (error) => {

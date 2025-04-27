@@ -23,6 +23,8 @@ export const useCreateTask = () => {
     onSuccess: (ctx) => {
       toast.success("Task created");
       queryClient.invalidateQueries({ queryKey: ["tasks"] }); //refetch  account key
+      queryClient.invalidateQueries({ queryKey: ["project-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-analytics"] });
     },
 
     onError: () => {

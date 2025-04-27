@@ -1,12 +1,14 @@
-import { db } from "@/lib/db";
-import { authMiddleware } from "@/lib/hono-middleware";
 import { zValidator } from "@hono/zod-validator";
 import { Session, User } from "better-auth";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
+import { endOfMonth, startOfMonth, subMonths } from "date-fns";
+
+import { db } from "@/lib/db";
+import { authMiddleware } from "@/lib/hono-middleware";
 import { createProjectSchema, updateProjectSchema } from "../schema";
-import { MemberRole } from "@prisma/client";
+import { MemberRole, TaskStatus } from "@prisma/client";
 
 type Variables = {
   user: User | null;
@@ -184,11 +186,11 @@ const app = new Hono<{ Variables: Variables }>()
 
       //TODO: member can delete only the project they created and admin can delete every project
 
-      // if (!member || member.role !== MemberRole.ADMIN) {
-      //   throw new HTTPException(401, {
-      //     message: "You are not authorized to delete project",
-      //   });
-      // }
+      if (!member || member.role !== MemberRole.ADMIN) {
+        throw new HTTPException(401, {
+          message: "You are not authorized to delete project",
+        });
+      }
 
       await db.project.delete({
         where: {
@@ -204,6 +206,199 @@ const app = new Hono<{ Variables: Variables }>()
       });
     }
   )
+  .get("/:projectId/analytics", authMiddleware, async (c) => {
+    const user = c.get("user");
+    const { projectId } = c.req.param();
+
+    if (!user) {
+      throw new HTTPException(401, { message: "unauthorized user" });
+    }
+
+    const project = await db.project.findFirst({
+      where: {
+        id: projectId,
+      },
+    });
+
+    if (!project) {
+      throw new HTTPException(404, { message: "project not found" });
+    }
+
+    const member = await db.member.findFirst({
+      where: {
+        workspaceId: project.workspaceId,
+        userId: user?.id,
+      },
+    });
+
+    if (!member) {
+      throw new HTTPException(401, { message: "unauthorized" });
+    }
+
+    const now = new Date();
+    const thisMonthStart = startOfMonth(now);
+    const thisMonthEnd = endOfMonth(now);
+    const lastMonthStart = startOfMonth(subMonths(now, 1));
+    const lastMonthEnd = endOfMonth(subMonths(now, 1));
+
+    //total task count in this project
+    const thisMonthTasksCount = await db.task.count({
+      where: {
+        projectId: project.id,
+        createdAt: {
+          lte: thisMonthEnd,
+          gte: thisMonthStart,
+        },
+      },
+    });
+    console.log("🚀 ~ .get ~ thisMonthTask:", thisMonthTasksCount);
+
+    const lastMonthTasksCount = await db.task.count({
+      where: {
+        projectId: project.id,
+        createdAt: {
+          lte: lastMonthEnd,
+          gte: lastMonthStart,
+        },
+      },
+    });
+
+    const taskDifference = thisMonthTasksCount - lastMonthTasksCount;
+
+    // assigned task count
+    const thisMonthAssignedTasksCount = await db.task.count({
+      where: {
+        projectId: project.id,
+        assigneeId: member.id,
+        createdAt: {
+          lte: thisMonthEnd,
+          gte: thisMonthStart,
+        },
+      },
+    });
+    const lastMonthAssignedTasksCount = await db.task.count({
+      where: {
+        projectId: project.id,
+        assigneeId: member.id,
+        createdAt: {
+          lte: lastMonthEnd,
+          gte: lastMonthStart,
+        },
+      },
+    });
+
+    const assignedTaskDifference =
+      thisMonthAssignedTasksCount - lastMonthAssignedTasksCount;
+
+    //this month incomplete task
+    const thisMonthIncompleteTasksCount = await db.task.count({
+      where: {
+        projectId: project.id,
+        status: {
+          not: TaskStatus.DONE,
+        },
+        createdAt: {
+          lte: thisMonthEnd,
+          gte: thisMonthStart,
+        },
+      },
+    });
+    const lastMonthIncompleteTasksCount = await db.task.count({
+      where: {
+        projectId: project.id,
+        status: {
+          not: TaskStatus.DONE,
+        },
+        createdAt: {
+          lte: lastMonthEnd,
+          gte: lastMonthStart,
+        },
+      },
+    });
+
+    const incompleteTaskDifference =
+      thisMonthIncompleteTasksCount - lastMonthIncompleteTasksCount;
+
+    // complete task count
+    const thisMonthCompleteTasksCount = await db.task.count({
+      where: {
+        projectId: project.id,
+        status: {
+          equals: TaskStatus.DONE,
+        },
+        createdAt: {
+          lte: thisMonthEnd,
+          gte: thisMonthStart,
+        },
+      },
+    });
+    const lastMonthCompleteTasksCount = await db.task.count({
+      where: {
+        projectId: project.id,
+        status: {
+          equals: TaskStatus.DONE,
+        },
+        createdAt: {
+          lte: lastMonthEnd,
+          gte: lastMonthStart,
+        },
+      },
+    });
+
+    const completedTaskDifference =
+      thisMonthCompleteTasksCount - lastMonthCompleteTasksCount;
+
+    // over deu task
+    const thisMonthOverdueTasksCount = await db.task.count({
+      where: {
+        projectId: project.id,
+        status: {
+          not: TaskStatus.DONE,
+        },
+        dueDate: {
+          lt: now,
+        },
+        createdAt: {
+          lte: thisMonthEnd,
+          gte: thisMonthStart,
+        },
+      },
+    });
+    const lastMonthOverdueTasksCount = await db.task.count({
+      where: {
+        projectId: project.id,
+        status: {
+          not: TaskStatus.DONE,
+        },
+        dueDate: {
+          lt: now,
+        },
+        createdAt: {
+          lte: lastMonthEnd,
+          gte: lastMonthStart,
+        },
+      },
+    });
+
+    const overdueTaskDifference =
+      thisMonthOverdueTasksCount - lastMonthOverdueTasksCount;
+
+    return c.json({
+      data: {
+        taskCount: thisMonthTasksCount,
+        taskDifference,
+        assignTaskCount: thisMonthAssignedTasksCount,
+        assignedTaskDifference,
+        completedTaskCount: thisMonthCompleteTasksCount,
+        completedTaskDifference,
+        incompletedTaskCount: thisMonthIncompleteTasksCount,
+        incompleteTaskDifference,
+        overdueTaskCount: thisMonthOverdueTasksCount,
+        overdueTaskDifference,
+      },
+    });
+  })
+
   .get("/:projectId", authMiddleware, async (c) => {
     const user = c.get("user");
 

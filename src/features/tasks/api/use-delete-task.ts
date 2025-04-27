@@ -29,7 +29,9 @@ export const useDeleteTask = () => {
     onSuccess: ({ data }) => {
       toast.success("Task deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["tasks"] }); //refetch  account key
-      queryClient.invalidateQueries({ queryKey: ["task", data.id] }); //refetch  account key
+      queryClient.invalidateQueries({ queryKey: ["task", data.id] });
+      queryClient.invalidateQueries({ queryKey: ["project-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-analytics"] }); //refetch  account key
 
       router.refresh();
     },
