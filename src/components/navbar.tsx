@@ -1,3 +1,5 @@
+"use client";
+
 import { UserButton } from "@/features/auth/components/user-button";
 import { SidebarTrigger } from "./ui/sidebar";
 import { Button } from "./ui/button";

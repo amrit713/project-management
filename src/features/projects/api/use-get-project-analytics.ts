@@ -30,7 +30,6 @@ export const useGetProjectAnalytics = ({
 
       return data;
     },
-    ...options,
   });
 
   return query;
