@@ -1,7 +1,6 @@
 import { ProjectAnalyticsResponseType } from "@/features/projects/api/use-get-project-analytics";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { AnalyticsCard } from "./analytics-card";
-import { DottedSeperator } from "./dotted-separator";
 
 export const Analytics = ({ data }: ProjectAnalyticsResponseType) => {
   return (
