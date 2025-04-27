@@ -11,10 +11,9 @@ export type ProjectAnalyticsResponseType = InferResponseType<
   200
 >;
 
-export const useGetProjectAnalytics = (
-  { projectId }: UseGetProjectAnalyticsProps,
-  options = {}
-) => {
+export const useGetProjectAnalytics = ({
+  projectId,
+}: UseGetProjectAnalyticsProps) => {
   const query = useQuery({
     queryKey: ["project-analytics", projectId],
     queryFn: async () => {
