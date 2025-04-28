@@ -17,6 +17,8 @@ import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 
 export const WorkspaceSwitcher = () => {
   const { data: workspaces, isLoading } = useGetWorkspaces();
+  console.log("🚀 ~ WorkspaceSwitcher ~ workspaces:", workspaces);
+
   const workspaceId = useWorkspaceId();
 
   const router = useRouter();

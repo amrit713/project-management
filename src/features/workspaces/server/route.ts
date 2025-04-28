@@ -66,6 +66,7 @@ const app = new Hono<{ Variables: Variables }>()
 
     const { name, imageUrl } = c.req.valid("form");
     const inviteCode = generateInviteCode(6);
+    console.log("🚀 ~ .post ~ name, imageUrl:", name, imageUrl);
 
     const workspace = await db.workspace.create({
       data: {

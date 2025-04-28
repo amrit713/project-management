@@ -31,6 +31,7 @@ export const WorkspaceIdClient = () => {
     useGetWorkspaceAnalytics({
       workspaceId,
     });
+
   const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({
     workspaceId,
   });

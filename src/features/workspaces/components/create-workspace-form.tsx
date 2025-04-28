@@ -47,7 +47,6 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
       image: values.imageUrl ? values.imageUrl : "",
     };
 
-    console.log(values);
     createWorkspace(
       { form: finalValues },
       {
