@@ -6,7 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, CheckCheck, CopyIcon, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { updateWorkspaceSchema } from "../schema";
 import { DottedSeperator } from "@/components/dotted-separator";
 import {
@@ -21,17 +27,18 @@ import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
 
 import { cn } from "@/lib/utils";
-import { Workspace } from "@prisma/client";
+import { MemberRole, Workspace } from "@prisma/client";
 import { useUpdateWorkspace } from "../api/use-update-workspace";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteWorkspace } from "../api/use-delete-workspace";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useResetInviteCode } from "../api/use-reset-invite-code";
+import { FaUserLock } from "react-icons/fa";
 
 interface EditWorkspaceFormProps {
   onCancel?: () => {};
-  initialValues: Workspace;
+  initialValues: Workspace & { role: MemberRole };
 }
 
 export const EditWorkspaceForm = ({
@@ -46,6 +53,8 @@ export const EditWorkspaceForm = ({
   const { mutate: editWorkspace, isPending } = useUpdateWorkspace();
   const { mutate: resetInviteCode, isPending: resetingInviteCode } =
     useResetInviteCode();
+
+  const unAuthorizedEdit = initialValues.role !== MemberRole.ADMIN;
 
   const [DeleteDialog, confirmDelete] = useConfirm(
     "Delete Workspace",
@@ -117,22 +126,33 @@ export const EditWorkspaceForm = ({
         className="w-full h-full  shadow-none
   "
       >
-        <CardHeader className="flex p-4 items-center gap-4">
-          <Button
-            variant={"secondary"}
-            className="text-neutral-600 hover:text-neutral-900"
-            onClick={
-              onCancel
-                ? onCancel
-                : () => router.push(`/workspaces/${initialValues.id}`)
-            }
-          >
-            {" "}
-            <ArrowLeft className="size-4 mr-2" /> Back
-          </Button>
-          <CardTitle className="font-bold text-xl">
-            {initialValues.name}
-          </CardTitle>
+        <CardHeader>
+          <div className=" flex items-center gap-4">
+            <Button
+              variant={"secondary"}
+              className="text-neutral-600 hover:text-neutral-900"
+              onClick={
+                onCancel
+                  ? onCancel
+                  : () => router.push(`/workspaces/${initialValues.id}`)
+              }
+            >
+              {" "}
+              <ArrowLeft className="size-4 mr-2" /> Back
+            </Button>
+            <CardTitle className="font-bold text-xl">
+              {initialValues.name}
+            </CardTitle>
+          </div>
+
+          {unAuthorizedEdit && (
+            <CardDescription className="flex flex-col items-center gap-2 text-destructive/50 font-semibold">
+              <FaUserLock className="size-10 " />
+              <span className="">
+                Your are not authorized to edit this workspace
+              </span>
+            </CardDescription>
+          )}
         </CardHeader>
         <div className="px-4">
           <DottedSeperator className="py-4" />
@@ -151,7 +171,7 @@ export const EditWorkspaceForm = ({
                     <FormControl>
                       <Input
                         required
-                        disabled={isPending}
+                        disabled={isPending || unAuthorizedEdit}
                         placeholder="Enter your workspace name"
                         {...field}
                       />
@@ -161,7 +181,7 @@ export const EditWorkspaceForm = ({
               />
 
               <FormField
-                disabled={isPending}
+                disabled={isPending || unAuthorizedEdit}
                 control={form.control}
                 name="imageUrl"
                 render={({ field }) => (
@@ -172,6 +192,7 @@ export const EditWorkspaceForm = ({
                         endpoint="workspaceImage"
                         onChange={field.onChange}
                         value={field.value ? field.value : ""}
+                        disabled={isPending || unAuthorizedEdit}
                       />
                     </FormControl>
                   </FormItem>
@@ -190,7 +211,11 @@ export const EditWorkspaceForm = ({
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={isPending} className="flex-1">
+                  <Button
+                    type="submit"
+                    disabled={isPending || unAuthorizedEdit}
+                    className="flex-1"
+                  >
                     {isPending ? (
                       <Loader className="size-4 animate-spin" />
                     ) : (
@@ -233,7 +258,7 @@ export const EditWorkspaceForm = ({
               className="mt-4 w-fit ml-auto"
               size={"sm"}
               variant={"destructive"}
-              disabled={isPending || resetingInviteCode}
+              disabled={isPending || resetingInviteCode || unAuthorizedEdit}
               onClick={handleResetInviteLink}
             >
               Reset invite link
@@ -255,7 +280,7 @@ export const EditWorkspaceForm = ({
               className="mt-4 w-fit ml-auto"
               size={"sm"}
               variant={"destructive"}
-              disabled={isPending || deletingWorksapce}
+              disabled={isPending || deletingWorksapce || unAuthorizedEdit}
               onClick={handleDelete}
             >
               Delete workspace{" "}

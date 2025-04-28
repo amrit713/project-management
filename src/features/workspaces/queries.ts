@@ -69,7 +69,7 @@ export const getWorkspace = async (id: string) => {
     throw Error("no workspace found");
   }
 
-  return workspace;
+  return { ...workspace, role: member.role };
 };
 
 export const getWorkspaceInfo = async (id: string) => {
