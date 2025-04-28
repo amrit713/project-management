@@ -25,8 +25,6 @@ import { Project } from "@prisma/client";
 import { useUpdateProject } from "../api/use-update-project";
 import { useConfirm } from "@/hooks/use-confirm";
 
-import { useState } from "react";
-import { toast } from "sonner";
 import { useDeleteProject } from "../api/use-delete-project";
 
 interface EditProjectFormProps {

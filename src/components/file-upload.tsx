@@ -21,9 +21,15 @@ interface FileUploadProps {
   onChange: (url?: string) => void;
   value: string;
   endpoint: "workspaceImage" | "projectImage";
+  disabled?: boolean;
 }
 
-export const FileUpload = ({ onChange, endpoint, value }: FileUploadProps) => {
+export const FileUpload = ({
+  onChange,
+  endpoint,
+  value,
+  disabled,
+}: FileUploadProps) => {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(40);
   const [isPending, startTransition] = useTransition();
@@ -85,6 +91,7 @@ export const FileUpload = ({ onChange, endpoint, value }: FileUploadProps) => {
           "image/jpeg": [".jpeg"],
           "image/jpg": [".jpg"],
         }}
+        disabled={disabled}
         onDragEnter={() => setIsDragOver(true)}
         onDragLeave={() => setIsDragOver(false)}
       >
