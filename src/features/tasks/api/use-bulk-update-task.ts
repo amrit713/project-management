@@ -32,7 +32,7 @@ export const useBulkUpdateTask = () => {
       }
       return await response.json();
     },
-    onSuccess: ({ data }) => {
+    onSuccess: () => {
       toast.success("Tasks updated successfully");
       queryClient.invalidateQueries({ queryKey: ["tasks"] }); //refetch  account key
       queryClient.invalidateQueries({ queryKey: ["project-analytics"] });

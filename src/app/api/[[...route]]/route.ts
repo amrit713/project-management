@@ -10,6 +10,7 @@ const app = new Hono().basePath("/api");
 
 // use websocket for realtime update
 
+//@typescript-eslint/no-unused-vars
 const routes = app
   .route("/auth", authentication)
   .route("/workspaces", workspaces)

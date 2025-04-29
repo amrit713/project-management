@@ -1,6 +1,6 @@
 "use client";
 
-import { PlusIcon, CalendarIcon, SettingsIcon } from "lucide-react";
+import { PlusIcon, CalendarIcon } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 
@@ -12,6 +12,8 @@ import { useGetMembers } from "@/features/members/api/use-get-members";
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import { useGetTasks } from "@/features/tasks/api/use-get-tasks";
 import { useGetWorkspaceAnalytics } from "@/features/workspaces/api/use-get-workspace-analytics";
+import { ProjectAvatar } from "@/features/projects/components/project-avatar";
+import { MemberAvatar } from "@/features/members/components/member-avatar";
 
 import { PageLoader } from "@/components/page-loader";
 import { PageError } from "@/components/page-error";
@@ -19,11 +21,7 @@ import { Analytics } from "@/components/analytics";
 import { Button } from "@/components/ui/button";
 import { DottedSeperator } from "@/components/dotted-separator";
 import { Card, CardContent } from "@/components/ui/card";
-
 import { MemberType, ProjectType, TaskType } from "@/types";
-
-import { ProjectAvatar } from "@/features/projects/components/project-avatar";
-import { MemberAvatar } from "@/features/members/components/member-avatar";
 
 export const WorkspaceIdClient = () => {
   const workspaceId = useWorkspaceId();

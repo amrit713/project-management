@@ -12,12 +12,11 @@ import {
   SelectValue,
 } from "./ui/select";
 import { WorkspaceAvatar } from "@/features/workspaces/components/workspace-avatar";
-import { Button } from "./ui/button";
+
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 
 export const WorkspaceSwitcher = () => {
   const { data: workspaces, isLoading } = useGetWorkspaces();
-  console.log("🚀 ~ WorkspaceSwitcher ~ workspaces:", workspaces);
 
   const workspaceId = useWorkspaceId();
 

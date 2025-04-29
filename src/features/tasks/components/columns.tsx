@@ -5,7 +5,7 @@ import { ArrowUpDown, MoreVertical } from "lucide-react";
 
 import { TaskType } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Member, Project } from "@prisma/client";
+
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
 import { TaskDate } from "./task-date";

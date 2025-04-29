@@ -1,6 +1,5 @@
-import { UserButton } from "@/features/auth/components/user-button";
 import { getWorkspaces } from "@/features/workspaces/queries";
-import { CreateWorkspaceForm } from "@/features/workspaces/components/create-workspace-form";
+
 import { currentUser } from "@/lib/current-user";
 import { redirect } from "next/navigation";
 
@@ -15,12 +14,4 @@ export default async function Home() {
   } else {
     redirect(`/workspaces/${workspaces[0].id}`);
   }
-  // return (
-  //   <div className="max-w-2xl py-8 px-12">
-  //     home page
-  //     {/* <div className="w-full border rounded-xl shadow-md">
-  //       <CreateWorkspaceForm />
-  //     </div> */}
-  //   </div>
-  // );
 }

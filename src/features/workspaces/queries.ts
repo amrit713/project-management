@@ -38,7 +38,7 @@ export const getWorkspaces = async () => {
     }
 
     return workspaces;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -94,7 +94,7 @@ export const getWorkspaceInfo = async (id: string) => {
     }
 
     return { name: workspace.name };
-  } catch (error) {
+  } catch {
     return null;
   }
 };

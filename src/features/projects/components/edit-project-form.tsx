@@ -1,5 +1,7 @@
 "use client";
 
+//@typescript-eslint/no-empty-object-type
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,7 +30,7 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteProject } from "../api/use-delete-project";
 
 interface EditProjectFormProps {
-  onCancel?: () => {};
+  onCancel?: () => void;
   initialValues: Project;
 }
 

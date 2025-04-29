@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodType } from "zod";
 import { FaGoogle, FaGithub } from "react-icons/fa";
@@ -55,7 +54,6 @@ export const AuthForm = <T extends FieldValues>({
   schema,
   isLoading = false,
 }: Props<T>) => {
-  const router = useRouter();
   const isSignIn = type === "SIGN_IN";
 
   const form: UseFormReturn<T> = useForm({

@@ -2,7 +2,7 @@ import React from "react";
 
 import { currentUser } from "@/lib/current-user";
 import { redirect } from "next/navigation";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Navbar } from "@/components/navbar";
 import { CreateWorkspaceModal } from "@/features/workspaces/components/create-workspace-modal";

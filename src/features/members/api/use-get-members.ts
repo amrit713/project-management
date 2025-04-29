@@ -1,9 +1,5 @@
 import { client } from "@/lib/rpc";
 import { useQuery } from "@tanstack/react-query";
-import { InferRequestType, InferResponseType } from "hono";
-
-type ResponseType = InferResponseType<(typeof client.api.members)["$get"]>;
-type RequestType = InferRequestType<(typeof client.api.members)["$get"]>;
 
 interface useGetMembersProps {
   workspaceId: string;

@@ -37,7 +37,7 @@ import { useResetInviteCode } from "../api/use-reset-invite-code";
 import { FaUserLock } from "react-icons/fa";
 
 interface EditWorkspaceFormProps {
-  onCancel?: () => {};
+  onCancel?: () => void;
   initialValues: Workspace & { role: MemberRole };
 }
 
@@ -97,9 +97,9 @@ export const EditWorkspaceForm = ({
     editWorkspace(
       { form: finalValues, param: { workspaceId: initialValues.id } },
       {
-        onSuccess: async ({ data }) => {
+        onSuccess: async () => {
           router.push(`/workspaces/${initialValues.id}`);
-          router.refresh;
+          router.refresh();
           form.reset();
         },
       }

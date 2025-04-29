@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useConfirm } from "@/hooks/use-confirm";
-import { cn, snakeCaseToTitleCase } from "@/lib/utils";
+import { snakeCaseToTitleCase } from "@/lib/utils";
 
 export const MembersList = () => {
   const workspaceId = useWorkspaceId();
@@ -44,10 +44,8 @@ export const MembersList = () => {
   );
 
   const { data } = useGetMembers({ workspaceId });
-  const { mutate: deleteMember, isPending: isDeletingMember } =
-    useDeleteMember();
-  const { mutate: updateMember, isPending: isUpdatingMember } =
-    useUpdateMember();
+  const { mutate: deleteMember } = useDeleteMember();
+  const { mutate: updateMember } = useUpdateMember();
 
   const handleUpdateMember = (memberId: string, role: MemberRole) => {
     updateMember({
@@ -83,7 +81,7 @@ export const MembersList = () => {
         <DottedSeperator />
       </div>
       <CardContent className="p-6 flex flex-col gap-4">
-        {data?.map((member, idx) => (
+        {data?.map((member) => (
           <div key={member.id} className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <MemberAvatar name={member.user.name} />

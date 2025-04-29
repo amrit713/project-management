@@ -7,9 +7,14 @@ import {
   subMonths,
 } from "date-fns";
 import { enUS } from "date-fns/locale";
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import {
+  Calendar as BigCalendar,
+  dateFnsLocalizer,
+  DateLocalizer,
+} from "react-big-calendar";
 import { useState } from "react";
 import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { TaskPriority, TaskStatus } from "@prisma/client";
 
 import { TaskType } from "@/types";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -17,9 +22,26 @@ import "./data-calendar.css";
 import { EventCard } from "./event-card";
 import { Button } from "@/components/ui/button";
 
+const Calendar = BigCalendar as React.ComponentType<any>;
+
 const locales = {
   "en-Us": enUS,
 };
+
+interface IEvent {
+  id: string;
+  start: Date;
+  end: Date;
+  title: string;
+  project: {
+    name: string;
+    id: string;
+    imageUrl: string | null;
+  };
+  assignee: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+}
 
 const localizer = dateFnsLocalizer({
   format,
@@ -69,7 +91,7 @@ export const DataCalendar = ({ data }: DataCalendarProps) => {
     data.length > 0 ? new Date(data[0].dueDate) : new Date()
   );
 
-  const events = data.map((task) => ({
+  const events: IEvent[] = data.map((task) => ({
     start: new Date(task.dueDate),
     end: new Date(task.dueDate),
     title: task.name,
@@ -102,11 +124,14 @@ export const DataCalendar = ({ data }: DataCalendarProps) => {
       className="h-full"
       max={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
       formats={{
-        weekdayFormat: (date, culture, localizer) =>
-          localizer?.format(date, "EEE", culture) ?? "",
+        weekdayFormat: (
+          date: Date,
+          culture: string,
+          localizer: DateLocalizer
+        ) => localizer?.format(date, "EEE", culture) ?? "",
       }}
       components={{
-        eventWrapper: ({ event }) => (
+        eventWrapper: ({ event }: { event: IEvent }) => (
           <EventCard
             id={event.id}
             title={event.title}

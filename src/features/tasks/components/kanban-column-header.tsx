@@ -8,7 +8,6 @@ import {
   CircleIcon,
   PlusIcon,
 } from "lucide-react";
-import { useQueryState } from "nuqs";
 
 import { snakeCaseToTitleCase } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -42,7 +41,7 @@ export const KanbanColumnHeader = ({
 }: KanbanColumnHeaderProps) => {
   const { open } = useCreateTaskModal();
   const icon = statusIconMap[board];
-  const [status, setStatus] = useStatus();
+  const [_, setStatus] = useStatus();
 
   const onClickHandler = () => {
     setStatus(board);

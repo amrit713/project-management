@@ -18,7 +18,7 @@ export const useLogin = () => {
           callbackURL: "/",
         },
         {
-          onSuccess: (ctx) => {
+          onSuccess: () => {
             toast.success("User login successfully! ✅");
             router.push("/");
             router.refresh();

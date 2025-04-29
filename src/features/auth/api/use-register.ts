@@ -19,7 +19,7 @@ export const useRegister = () => {
           callbackURL: "/",
         },
         {
-          onSuccess: (ctx) => {
+          onSuccess: () => {
             toast.success("User Register successfully! ✅");
             router.push("/");
           },

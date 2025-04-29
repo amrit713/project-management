@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { createTaskSchema } from "../schema";
@@ -51,7 +50,6 @@ export const CreateTaskForm = ({
   projectOptions,
   memberOptions,
 }: CreateTaskFormProps) => {
-  const router = useRouter();
   const workspaceId = useWorkspaceId();
   const projectId = useProjectId();
   const { close } = useCreateTaskModal();
@@ -73,7 +71,7 @@ export const CreateTaskForm = ({
     createProject(
       { json: { ...values, workspaceId } },
       {
-        onSuccess: ({ data }) => {
+        onSuccess: () => {
           form.reset();
           close();
           //TODO: redirect to new task

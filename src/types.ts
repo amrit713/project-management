@@ -37,10 +37,11 @@ export type MemberType = Omit<Member, "createdAt" | "updatedAt"> & {
 };
 
 export interface EditTask
-  extends Omit<Task, "dueDate" | "createdAt" | "updatedAt"> {
+  extends Omit<Task, "dueDate" | "createdAt" | "updatedAt" | "suggestedDate"> {
   dueDate: string;
   createdAt: string;
   updatedAt: string;
+  suggestedDate?: string | null;
   project: ProjectType;
   assignee: {
     user: {

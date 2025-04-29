@@ -20,7 +20,7 @@ export const useCreateWorkspace = () => {
       }
       return await response.json();
     },
-    onSuccess: (ctx) => {
+    onSuccess: () => {
       toast.success("Worksapce created");
       queryClient.invalidateQueries({ queryKey: ["workspaces"] }); //refetch  account key
     },

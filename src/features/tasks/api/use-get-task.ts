@@ -1,6 +1,6 @@
-import { client } from "@/lib/rpc";
-import { TaskStatus } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+
+import { client } from "@/lib/rpc";
 
 interface UseGetTaskProps {
   taskId: string;

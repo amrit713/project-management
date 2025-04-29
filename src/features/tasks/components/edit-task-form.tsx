@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { TaskPriority, TaskStatus } from "@prisma/client";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { editTaskSchema } from "../schema";
@@ -31,7 +31,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
-import { TaskPriority, TaskStatus } from "@prisma/client";
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 
 import { EditTask } from "@/types";
@@ -53,7 +52,7 @@ export const EditTaskForm = ({
   initialValues,
 }: EditTaskFormProps) => {
   console.log("🚀 ~ initialValues:", initialValues);
-  const router = useRouter();
+
   const { close } = useEditTaskModal();
 
   const { mutate: editProject, isPending } = useUpdateTask();
@@ -73,7 +72,7 @@ export const EditTaskForm = ({
     editProject(
       { json: { ...values }, param: { taskId: initialValues.id } },
       {
-        onSuccess: ({ data }) => {
+        onSuccess: () => {
           close();
           //TODO: redirect to new task
         },

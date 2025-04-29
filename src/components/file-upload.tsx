@@ -32,7 +32,6 @@ export const FileUpload = ({
 }: FileUploadProps) => {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(40);
-  const [isPending, startTransition] = useTransition();
 
   const { startUpload, isUploading } = useUploadThing(endpoint, {
     onClientUploadComplete: ([data]) => {
@@ -108,7 +107,7 @@ export const FileUpload = ({
               <MousePointerSquareDashed
                 className={"size-6 text-zinc-500 mb-2"}
               />
-            ) : isUploading || isPending ? (
+            ) : isUploading ? (
               <Loader2 className={"animate-spin size-6 text-zinc-500 mb-2"} />
             ) : (
               <Img className={"h-6 w-6 text-zinc-500 mb-2"} />
@@ -123,10 +122,6 @@ export const FileUpload = ({
                     className={"mt-2 w-40 h-2 bg-gray-300"}
                   />
                 </div>
-              ) : isPending ? (
-                <div className="flex flex-col items-center">
-                  <p> please wait...</p>
-                </div>
               ) : isDragOver ? (
                 <p>
                   <span className={"font-semibold"}> Drop file</span> to upload
@@ -139,9 +134,7 @@ export const FileUpload = ({
               )}
             </div>
 
-            {isPending ? null : (
-              <p className={"text-xs text-zinc-500"}> PNG, JPG, JPEG</p>
-            )}
+            <p className={"text-xs text-zinc-500"}> PNG, JPG, JPEG</p>
           </div>
         )}
       </Dropzone>

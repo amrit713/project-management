@@ -2,10 +2,7 @@
 
 import { Loader, LogOut, Zap, Headphones, CircleUserRound } from "lucide-react";
 
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +15,6 @@ import { useCurrent } from "../api/use-current";
 import { useLogout } from "../api/use-logout";
 
 export const UserButton = () => {
-  const router = useRouter();
   const { mutate: logout } = useLogout();
 
   const { data: user, isLoading } = useCurrent();
