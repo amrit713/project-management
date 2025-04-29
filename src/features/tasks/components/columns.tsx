@@ -12,6 +12,7 @@ import { TaskDate } from "./task-date";
 import { Badge } from "@/components/ui/badge";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 import { TaskActions } from "./task-actions";
+import { Priority } from "@/components/priority";
 
 export const columns: ColumnDef<TaskType>[] = [
   {
@@ -114,6 +115,25 @@ export const columns: ColumnDef<TaskType>[] = [
     cell: ({ row }) => {
       const { status } = row.original;
       return <Badge variant={status}>{snakeCaseToTitleCase(status)} </Badge>;
+    },
+  },
+
+  {
+    accessorKey: "priority",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Priority
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const { priority } = row.original;
+      return <Priority priority={priority} className="font-medium" />;
     },
   },
 

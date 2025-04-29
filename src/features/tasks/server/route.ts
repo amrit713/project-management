@@ -7,7 +7,7 @@ import { z } from "zod";
 import { authMiddleware } from "@/lib/hono-middleware";
 import { createTaskSchema } from "../schema";
 import { db } from "@/lib/db";
-import { TaskStatus } from "@prisma/client";
+import { TaskPriority, TaskStatus } from "@prisma/client";
 
 const filterSchema = z.object({
   workspaceId: z.string(),
@@ -16,6 +16,7 @@ const filterSchema = z.object({
   status: z.nativeEnum(TaskStatus).nullish(),
   search: z.string().nullish(),
   dueDate: z.string().nullish(),
+  priority: z.nativeEnum(TaskPriority).nullish(),
 });
 
 type Variables = {
@@ -31,8 +32,15 @@ const app = new Hono<{ Variables: Variables }>()
       throw new HTTPException(401, { message: "Unauthorized" });
     }
 
-    const { workspaceId, projectId, assigneeId, status, search, dueDate } =
-      c.req.valid("query");
+    const {
+      workspaceId,
+      projectId,
+      assigneeId,
+      status,
+      search,
+      dueDate,
+      priority,
+    } = c.req.valid("query");
 
     const member = await db.member.findFirst({
       where: {
@@ -54,6 +62,7 @@ const app = new Hono<{ Variables: Variables }>()
         assigneeId: assigneeId || undefined,
         status: status || undefined,
         dueDate: dueDate || undefined,
+        priority: priority || undefined,
 
         name: search
           ? {
@@ -108,6 +117,7 @@ const app = new Hono<{ Variables: Variables }>()
         status,
         projectId,
         dueDate,
+        priority,
       } = c.req.valid("json");
 
       const member = await db.member.findFirst({
@@ -149,6 +159,7 @@ const app = new Hono<{ Variables: Variables }>()
           status,
           dueDate,
           position: newPostion,
+          priority,
         },
       });
 
@@ -175,6 +186,7 @@ const app = new Hono<{ Variables: Variables }>()
         status,
         projectId,
         dueDate,
+        priority,
       } = c.req.valid("json");
 
       const existingTask = await db.task.findFirst({
@@ -212,6 +224,7 @@ const app = new Hono<{ Variables: Variables }>()
           description,
           status,
           dueDate,
+          priority,
         },
       });
 

@@ -12,10 +12,11 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/date-picker";
-import { Folder, ListChecksIcon, ListTodo, Search, User } from "lucide-react";
+import { ChevronsUpIcon, Folder, ListChecksIcon, User } from "lucide-react";
 import { SelectValue } from "@radix-ui/react-select";
-import { TaskStatus } from "@prisma/client";
+import { TaskPriority, TaskStatus } from "@prisma/client";
 import { useTaskFilters } from "../hooks/use-task-filters";
+import { Priority } from "@/components/priority";
 
 interface DataFiltersProps {
   hideProjectFilter?: boolean;
@@ -43,7 +44,7 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
     label: member.user.name,
   }));
 
-  const [{ status, assigneeId, projectId, dueDate, search }, setFilters] =
+  const [{ status, assigneeId, projectId, dueDate, priority }, setFilters] =
     useTaskFilters();
 
   const onStatusChange = (value: string) => {
@@ -51,6 +52,14 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
       setFilters({ status: null });
     } else {
       setFilters({ status: value as TaskStatus });
+    }
+  };
+
+  const onPriorityChange = (value: string) => {
+    if (value === "all") {
+      setFilters({ priority: null });
+    } else {
+      setFilters({ priority: value as TaskPriority });
     }
   };
 
@@ -95,6 +104,35 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
           <SelectItem value={TaskStatus.IN_REVIEW}>In Review</SelectItem>
           <SelectItem value={TaskStatus.TODO}>Todo</SelectItem>
           <SelectItem value={TaskStatus.DONE}>Done</SelectItem>
+        </SelectContent>
+      </Select>
+
+      <Select
+        defaultValue={priority ?? undefined}
+        onValueChange={(value) => onPriorityChange(value)}
+      >
+        <SelectTrigger className="w-full lg:w-auto h-8">
+          <div className="flex items-center pr-2">
+            {!priority && <ChevronsUpIcon className="size-4 mr-2" />}
+            <SelectValue placeholder="All priority" />
+          </div>
+        </SelectTrigger>
+
+        <SelectContent>
+          <SelectItem value={"all"}>
+            <div className=" flex items-center gap-2">All priorities</div>
+          </SelectItem>
+          <SelectSeparator />
+
+          <SelectItem value={TaskPriority.HIGH}>
+            <Priority priority={TaskPriority.HIGH} />
+          </SelectItem>
+          <SelectItem value={TaskPriority.MEDIUM}>
+            <Priority priority={TaskPriority.MEDIUM} />
+          </SelectItem>
+          <SelectItem value={TaskPriority.LOW}>
+            <Priority priority={TaskPriority.LOW} />
+          </SelectItem>
         </SelectContent>
       </Select>
 

@@ -141,14 +141,23 @@ enum TaskStatus {
   DONE
 }
 
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 model Task {
   id   String @id @default(uuid())
   name String
 
-  description String?
-  dueDate     DateTime
-  status      TaskStatus
-  position    Int //minx:1000, max: 1000000
+  description   String?
+  dueDate       DateTime
+  status        TaskStatus
+  position      Int //minx:1000, max: 1000000
+  priority      TaskPriority @default(LOW)
+  summary       String? //AI_generated summary
+  suggestedDate DateTime? // AI -predicted due date
 
   assigneeId String
   assignee   Member @relation(fields: [assigneeId], references: [id], onDelete: Cascade)

@@ -18,6 +18,7 @@ export const useCreateTask = () => {
         const error = await response.text();
         throw new Error(error);
       }
+
       return await response.json();
     },
     onSuccess: (ctx) => {

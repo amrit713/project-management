@@ -1,4 +1,4 @@
-import { TaskStatus } from "@prisma/client";
+import { TaskPriority, TaskStatus } from "@prisma/client";
 import { z } from "zod";
 
 export const createTaskSchema = z.object({
@@ -9,6 +9,7 @@ export const createTaskSchema = z.object({
   dueDate: z.coerce.date(),
   assigneeId: z.string().trim().min(1, "Required"),
   description: z.string().optional(),
+  priority: z.nativeEnum(TaskPriority, { required_error: "Required" }),
 });
 
 export const editTaskSchema = createTaskSchema.omit({
