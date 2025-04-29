@@ -1,5 +1,5 @@
 import { parseAsString, parseAsStringEnum, useQueryStates } from "nuqs";
-import { TaskStatus } from "@prisma/client";
+import { TaskPriority, TaskStatus } from "@prisma/client";
 
 export const useTaskFilters = () => {
   return useQueryStates({
@@ -8,5 +8,6 @@ export const useTaskFilters = () => {
     assigneeId: parseAsString,
     search: parseAsString,
     dueDate: parseAsString,
+    priority: parseAsStringEnum(Object.values(TaskPriority)),
   });
 };

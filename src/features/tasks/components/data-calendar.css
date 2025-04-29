@@ -46,3 +46,21 @@
 .rbc-off-range-bg {
   background: inherit;
 }
+
+.rbc-time-content > * {
+  flex: 0 0 120px;
+  max-width: 120px;
+  min-width: 120px;
+}
+
+/* Mobile: auto shrink and scroll */
+@media (max-width: 768px) {
+  .rbc-time-content {
+    overflow-x: auto;
+  }
+
+  .rbc-time-content > * {
+    flex: 0 0 auto;
+    min-width: 250px; /* or 100% if you want one per row */
+  }
+}

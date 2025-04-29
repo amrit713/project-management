@@ -28,7 +28,8 @@ export const TaskViewSwitcher = ({
   hideProjectFilter,
 }: TaskViewSwitcherProps) => {
   const { mutate: bulkUpdate } = useBulkUpdateTask();
-  const [{ status, assigneeId, projectId, dueDate }] = useTaskFilters();
+  const [{ status, assigneeId, projectId, dueDate, priority }] =
+    useTaskFilters();
   const [view, setView] = useQueryState("task-view", {
     defaultValue: "table",
   });
@@ -41,6 +42,7 @@ export const TaskViewSwitcher = ({
     assigneeId,
     projectId: projectIdParam ? projectIdParam : projectId,
     dueDate,
+    priority,
   });
 
   const onKanbanChange = useCallback(

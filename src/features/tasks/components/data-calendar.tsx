@@ -77,6 +77,7 @@ export const DataCalendar = ({ data }: DataCalendarProps) => {
     assignee: task.assignee.user.name,
     status: task.status,
     id: task.id,
+    priority: task.priority,
   }));
 
   const handleNavigate = (action: "PREV" | "NEXT" | "TODAY") => {
@@ -112,6 +113,7 @@ export const DataCalendar = ({ data }: DataCalendarProps) => {
             assignee={event.assignee}
             project={event.project}
             status={event.status}
+            priority={event.priority}
           />
         ),
         toolbar: () => (

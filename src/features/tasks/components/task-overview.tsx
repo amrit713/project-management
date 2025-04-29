@@ -10,6 +10,7 @@ import { TaskDate } from "./task-date";
 import { Badge } from "@/components/ui/badge";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 import { useEditTaskModal } from "../hooks/use-edit-task-modal";
+import { Priority } from "@/components/priority";
 
 interface TaskOverviewProps {
   task: EditTask;
@@ -41,6 +42,12 @@ export const TaskOverview = ({ task }: TaskOverviewProps) => {
             <Badge variant={task.status}>
               {snakeCaseToTitleCase(task.status)}
             </Badge>
+          </OverviewProperty>
+          <OverviewProperty label="Priority">
+            <Priority
+              priority={task.priority}
+              className="text-sm font-medium"
+            />
           </OverviewProperty>
         </div>
       </div>

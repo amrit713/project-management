@@ -1,8 +1,9 @@
+import { Priority } from "@/components/priority";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { cn } from "@/lib/utils";
-import { Project, TaskStatus } from "@prisma/client";
+import { Project, TaskPriority, TaskStatus } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
 interface EventCardProps {
@@ -11,6 +12,7 @@ interface EventCardProps {
   assignee: string;
   project: Pick<Project, "name" | "imageUrl" | "id">;
   id: string;
+  priority: TaskPriority;
 }
 
 const statusColorMap: Record<TaskStatus, string> = {
@@ -27,6 +29,7 @@ export const EventCard = ({
   assignee,
   project,
   id,
+  priority,
 }: EventCardProps) => {
   const workspaceId = useWorkspaceId();
   const router = useRouter();
@@ -45,14 +48,17 @@ export const EventCard = ({
         )}
       >
         <p>{title}</p>
-        <div className="flex items-center gap-x-1">
-          <MemberAvatar className="size-6" name={assignee} />
+        <div className="flex items-center gap-1 justify-between">
+          <div className="flex items-center gap-1">
+            <MemberAvatar className="size-6" name={assignee} />
 
-          <div className="size-1 rounded-full bg-neutral-300" />
-          <ProjectAvatar
-            name={project.name}
-            image={project.imageUrl ?? undefined}
-          />
+            <div className="size-1 rounded-full bg-neutral-300" />
+            <ProjectAvatar
+              name={project.name}
+              image={project.imageUrl ?? undefined}
+            />
+          </div>
+          <Priority priority={priority} isHideLabel={true} />
         </div>
       </div>
     </div>

@@ -32,12 +32,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
-import { TaskStatus } from "@prisma/client";
+import { TaskPriority, TaskStatus } from "@prisma/client";
 
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 import { useCreateTaskModal } from "../hooks/use-create-task-modal";
 import { useStatus } from "../hooks/use-status";
 import { useProjectId } from "@/features/projects/hooks/use-project-id";
+import { Priority } from "@/components/priority";
 
 interface CreateTaskFormProps {
   onCancel?: () => void;
@@ -190,6 +191,37 @@ export const CreateTaskForm = ({
                       </SelectItem>
                       <SelectItem value={TaskStatus.TODO}>Todo</SelectItem>
                       <SelectItem value={TaskStatus.DONE}>Done</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="priority"
+              render={({ field }) => (
+                <FormItem className=" flex flex-col gap-4 ">
+                  <FormLabel>Priority</FormLabel>
+                  <Select
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select priority" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <FormMessage />
+                    <SelectContent>
+                      <SelectItem value={TaskPriority.HIGH}>
+                        <Priority priority={TaskPriority.HIGH} />
+                      </SelectItem>
+                      <SelectItem value={TaskPriority.MEDIUM}>
+                        <Priority priority={TaskPriority.MEDIUM} />
+                      </SelectItem>
+                      <SelectItem value={TaskPriority.LOW}>
+                        <Priority priority={TaskPriority.LOW} />
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
