@@ -3,11 +3,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreVertical } from "lucide-react";
 
-import { TaskType } from "@/types";
-import { Button } from "@/components/ui/button";
-
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
+
+import { TaskType } from "@/types";
+import { Button } from "@/components/ui/button";
 import { TaskDate } from "./task-date";
 import { Badge } from "@/components/ui/badge";
 import { snakeCaseToTitleCase } from "@/lib/utils";

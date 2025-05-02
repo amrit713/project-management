@@ -7,7 +7,7 @@ import { z } from "zod";
 import { authMiddleware } from "@/lib/hono-middleware";
 import { createTaskSchema } from "../schema";
 import { db } from "@/lib/db";
-import { TaskPriority, TaskStatus } from "@prisma/client";
+import { NotificationType, TaskPriority, TaskStatus } from "@prisma/client";
 
 const filterSchema = z.object({
   workspaceId: z.string(),
@@ -162,6 +162,24 @@ const app = new Hono<{ Variables: Variables }>()
           priority,
         },
       });
+      console.log("🚀 ~ task:", task);
+
+      const content = `${user.name} assigned you a task:${task.name}`;
+
+      console.log("🚀 ~ content:", content);
+
+      const notification = await db.notification.create({
+        data: {
+          content,
+          workspaceId: task.workspaceId,
+          type: NotificationType.TASK_ASSIGNED,
+          read: false,
+          projectId: task.projectId,
+          memberId: task.assigneeId,
+        },
+      });
+
+      console.log(notification);
 
       return c.json({ data: task });
     }

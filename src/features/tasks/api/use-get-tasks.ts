@@ -33,7 +33,6 @@ export const useGetTasks = ({
       priority,
     ],
     queryFn: async () => {
-      console.log(priority);
       const response = await client.api.tasks["$get"]({
         query: {
           workspaceId,
