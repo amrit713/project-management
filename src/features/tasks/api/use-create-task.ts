@@ -26,6 +26,7 @@ export const useCreateTask = () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] }); //refetch  account key
       queryClient.invalidateQueries({ queryKey: ["project-analytics"] });
       queryClient.invalidateQueries({ queryKey: ["workspace-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
 
     onError: () => {

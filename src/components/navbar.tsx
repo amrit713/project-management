@@ -1,9 +1,16 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import { BellIcon } from "lucide-react";
+
 import { UserButton } from "@/features/auth/components/user-button";
+import { Notification } from "@/features/notifications/components/notification";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { useGetNotifications } from "@/features/notifications/api/use-get-notifications";
+
 import { SidebarTrigger } from "./ui/sidebar";
 import { Button } from "./ui/button";
-import { usePathname } from "next/navigation";
+import { Badge } from "./ui/badge";
 
 const pathnameMap = {
   tasks: {
@@ -23,6 +30,12 @@ const defaultMap = {
 
 export const Navbar = () => {
   const pathname = usePathname();
+  const workspaceId = useWorkspaceId();
+
+  const { data } = useGetNotifications({
+    workspaceId,
+    unRead: true,
+  });
 
   const pathnameParts = pathname.split("/");
   const pathnameKey = pathnameParts[3] as keyof typeof pathnameMap;
@@ -39,7 +52,21 @@ export const Navbar = () => {
           <span className="text-neutral-500 text-sm"> {description}</span>
         </div>
       </div>
-      <UserButton />
+      <div className="flex items-center gap-4">
+        <Notification unReadCount={data ? data.length : 0}>
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            className="rounded-full size-10 relative"
+          >
+            <div className="absolute size-5 text-white rounded-full bg-rose-500 -top-1.5 -right-1.5">
+              {data ? data.length : 0}
+            </div>
+            <BellIcon className="size-5" />
+          </Button>
+        </Notification>
+        <UserButton />
+      </div>
     </nav>
   );
 };
