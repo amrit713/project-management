@@ -162,24 +162,23 @@ const app = new Hono<{ Variables: Variables }>()
           priority,
         },
       });
-      console.log("🚀 ~ task:", task);
 
-      const content = `${user.name} assigned you a task:${task.name}`;
+      const content = `${
+        user.id === member.userId ? "You" : user.name
+      }  assigned ${user.id === member.userId ? "your self" : "you"} a task "${
+        task.name
+      }"`;
 
-      console.log("🚀 ~ content:", content);
-
-      const notification = await db.notification.create({
+      await db.notification.create({
         data: {
           content,
           workspaceId: task.workspaceId,
           type: NotificationType.TASK_ASSIGNED,
           read: false,
-          projectId: task.projectId,
+          taskId: task.id,
           memberId: task.assigneeId,
         },
       });
-
-      console.log(notification);
 
       return c.json({ data: task });
     }
@@ -246,9 +245,43 @@ const app = new Hono<{ Variables: Variables }>()
         },
       });
 
+      const content = `${
+        user.id === member.userId ? "You" : user.name
+      } updated your's task "${task.name}"`;
+
+      const taskNotification = await db.notification.findFirst({
+        where: {
+          taskId: task.id,
+        },
+      });
+      if (taskNotification) {
+        await db.notification.update({
+          where: {
+            id: taskNotification.id,
+          },
+          data: {
+            content,
+            read: false,
+            type: NotificationType.TASK_UPDATED,
+          },
+        });
+      } else {
+        await db.notification.create({
+          data: {
+            content,
+            workspaceId: task.workspaceId,
+            type: NotificationType.TASK_UPDATED,
+            read: false,
+            taskId: task.id,
+            memberId: task.assigneeId,
+          },
+        });
+      }
+
       return c.json({ data: task });
     }
   )
+
   .delete("/:taskId", authMiddleware, async (c) => {
     const user = c.get("user");
 
