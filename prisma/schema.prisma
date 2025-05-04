@@ -170,8 +170,9 @@ model Task {
   projectId   String
   project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Notification Notification[]
 }
 
 enum NotificationType {
@@ -183,18 +184,21 @@ enum NotificationType {
 }
 
 model Notification {
-  id          String           @id @default(uuid())
-  type        NotificationType @default(TASK_ASSIGNED)
-  content     String
-  read        Boolean
-  //TODO: need to add workspaceId
-  projectId   String
-  project     Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  id         String           @id @default(uuid())
+  type       NotificationType @default(TASK_ASSIGNED)
+  content    String
+  read       Boolean
+  scheduleAt DateTime?
+
+  taskId      String
+  task        Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
   memberId    String
-  member      Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  member      Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
   workspaceId String
-  workspace   Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
 }

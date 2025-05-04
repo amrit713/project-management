@@ -34,7 +34,8 @@ export const useUpdateTask = () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] }); //refetch  account key
       queryClient.invalidateQueries({ queryKey: ["task", data.id] });
       queryClient.invalidateQueries({ queryKey: ["project-analytics"] });
-      queryClient.invalidateQueries({ queryKey: ["workspace-analytics"] }); //refetch  account key
+      queryClient.invalidateQueries({ queryKey: ["workspace-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
 
       router.refresh();
     },
