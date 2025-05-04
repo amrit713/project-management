@@ -70,7 +70,7 @@ export const NotificationItems = ({ unRead }: NotificationItemsProps) => {
   }
 
   return (
-    <ScrollArea className=" max-h-[50vh]">
+    <ScrollArea className="max-h-[50vh]">
       <div className="flex flex-col gap-1.5 ">
         <DeleteDialog />
         {/* card content */}
@@ -78,7 +78,7 @@ export const NotificationItems = ({ unRead }: NotificationItemsProps) => {
           notifications?.map((notification) => (
             <div
               key={notification.id}
-              className="flex justify-between hover:cursor-pointer  hover:bg-gray-100 p-1.5 rounded transition"
+              className=" group flex justify-between hover:cursor-pointer  hover:bg-gray-100 p-1.5 rounded transition"
             >
               <div
                 className="flex  items-start  "
@@ -116,7 +116,7 @@ export const NotificationItems = ({ unRead }: NotificationItemsProps) => {
               <Button
                 variant={"outline"}
                 size={"icon"}
-                className="text-neutral-600 hover:text-neutral-900 transition"
+                className="hidden text-neutral-600 group-hover:flex hover:text-neutral-900 transition"
                 type="button"
                 onClick={() => handleDelete(notification.id)}
               >
