@@ -15,7 +15,9 @@ async function AuthLayout({ children }: { children: React.ReactNode }) {
     <main className="bg-neutral-50 min-h-screen">
       <div className="mx-auto max-w-screen-2xl p-4">
         <nav className="flex items-center justify-between bg-white p-2 border rounded-lg border-neutral-200  ">
-          <Image src={"/logo-360.svg"} alt="logo" width={156} height={58} />
+          <Link href={"/"}>
+            <Image src={"/logo-360.svg"} alt="logo" width={156} height={58} />
+          </Link>
 
           <Button variant={"secondary"} asChild>
             <Link href={"/sign-up"}>Sign Up</Link>
