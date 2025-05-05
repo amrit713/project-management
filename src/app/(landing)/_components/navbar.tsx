@@ -73,13 +73,13 @@ export const Navbar = () => {
             </div>
 
             <div className="flex gap-2">
-              <Button asChild variant="secondary" className="hidden sm:flex ">
+              <Button asChild>
                 <Link href="/sign-in">
                   <span>Login</span>
                 </Link>
               </Button>
 
-              <Button asChild>
+              <Button className="hidden sm:flex " variant={"teritrary"} asChild>
                 <Link href="/sign-up">
                   <span>Get Started </span>
                   <ArrowRight className="size-4" />
