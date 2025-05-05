@@ -16,7 +16,7 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   if (!user) redirect("/sign-in");
   return (
-    <SidebarProvider>
+    <SidebarProvider suppressHydrationWarning>
       <CreateWorkspaceModal />
       <CreateProjectModal />
       <CreateTaskModal />

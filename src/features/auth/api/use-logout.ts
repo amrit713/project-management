@@ -15,7 +15,7 @@ export const useLogout = () => {
       await authClient.signOut({
         fetchOptions: {
           onSuccess: () => {
-            router.push("/sign-in");
+            router.push("/");
             toast.success("Logout successfully !");
             router.refresh();
             queryClient.invalidateQueries({
