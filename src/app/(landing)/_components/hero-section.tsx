@@ -96,7 +96,7 @@ export const HeroSection = () => {
                 className="bg-foreground/10 rounded-[calc(var(--radius-md)+0.125rem)] border p-0.5"
               >
                 <Button className="group  px-5  flex items-center " asChild>
-                  <Link href="#link" className={"flex items-center"}>
+                  <Link href="/sign-up" className={"flex items-center"}>
                     <span className="text-nowrap">Get Started</span>
                     <div className="w-5 ">
                       <Minus
