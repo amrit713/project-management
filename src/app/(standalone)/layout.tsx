@@ -18,7 +18,7 @@ function StandaloneLayout({ children }: StandaloneLayoutProps) {
 
           <UserButton />
         </nav>
-        <div className=" flex flex-col items-center justify-center py-2">
+        <div className="flex flex-col items-center justify-center py-2">
           {children}
         </div>
       </div>

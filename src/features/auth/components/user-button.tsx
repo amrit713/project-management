@@ -13,13 +13,22 @@ import {
 import { DottedSeperator } from "@/components/dotted-separator";
 import { useCurrent } from "../api/use-current";
 import { useLogout } from "../api/use-logout";
+import Link from "next/link";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { useGetSubscription } from "@/features/subscriptions/api/use-get-subscription";
+import { PlanTier } from "@prisma/client";
+import { snakeCaseToTitleCase } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 export const UserButton = () => {
+  const workspaceId = useWorkspaceId();
   const { mutate: logout } = useLogout();
+  const { data: subscription, isLoading: isSubscriptionLoading } =
+    useGetSubscription();
 
-  const { data: user, isLoading } = useCurrent();
+  const { data: user, isLoading: isUserLoading } = useCurrent();
 
-  if (isLoading) {
+  if (isUserLoading || isSubscriptionLoading) {
     return (
       <div className="size-10  flex items-center justify-center bg-primary/10 border-neutral-400 rounded-full">
         <Loader className="size-4 animate-spin text-muted-foreground" />
@@ -52,13 +61,16 @@ export const UserButton = () => {
         className="w-60"
         sideOffset={10}
       >
-        <div className="flex flex-col items-center justify-center gap-2 px-2.5 py-4 ">
+        <div className="flex flex-col items-center justify-center gap-2 px-2.5 py-4  ">
           <Avatar className="size-[52px] transition border border-netural-400 ">
             <AvatarFallback className="bg-primary/10 font-medium text-primary flex text-xl items-center justify-center">
               {avatarFallback}
             </AvatarFallback>
           </Avatar>
 
+          {subscription?.plan !== PlanTier.FREE && (
+            <Badge className=" rounded">{subscription?.plan}</Badge>
+          )}
           <div className=" flex flex-col items-center justify-center">
             <p className="text-sm font-semibold text-neutral-900 capitalize">
               {name.split(" ")[0] || "User"}
@@ -72,9 +84,29 @@ export const UserButton = () => {
           <CircleUserRound className="text-neutral-500 size-4" />
           Account settings
         </DropdownMenuItem>
-        <DropdownMenuItem className="py-2 text-neutral-900  font-medium flex items-center gap-2">
-          <Zap className="text-neutral-500 size-4" />
-          Upgrade to Plus
+        <DropdownMenuItem
+          className="py-2 text-neutral-900  font-medium "
+          asChild
+        >
+          {subscription?.plan === PlanTier.FREE ? (
+            <Link
+              href={`/workspaces/${workspaceId}/payment`}
+              className="flex items-center gap-2"
+            >
+              <Zap className="text-neutral-500 size-4" />
+              Upgrade to Plus
+            </Link>
+          ) : (
+            <Link
+              className="flex items-center gap-2  "
+              href={`/workspaces/${workspaceId}/payment`}
+            >
+              <Zap className="text-primary size-4" />
+              <p className="text-primary">
+                Upgraded to {snakeCaseToTitleCase(subscription?.plan ?? "PRO")}{" "}
+              </p>
+            </Link>
+          )}
         </DropdownMenuItem>
         <DropdownMenuItem className="py-2 text-neutral-900 font-medium flex items-center gap-2">
           <Headphones className="text-neutral-500 size-4" />
