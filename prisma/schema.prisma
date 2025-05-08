@@ -24,9 +24,10 @@ model User {
   workspaces    Workspace[]
   members       Member[]
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Project   Project[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  Project      Project[]
+  Subscription Subscription?
 
   @@unique([email])
   @@map("user")
@@ -93,6 +94,7 @@ model Workspace {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   Notification Notification[]
+  Subscription Subscription?
 
   @@unique([userId, name])
 }
@@ -201,4 +203,37 @@ model Notification {
   updatedAt DateTime @updatedAt
   Project   Project? @relation(fields: [projectId], references: [id])
   projectId String?
+}
+
+enum PlanTier {
+  FREE
+  PRO
+  TEAM
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELED
+  PENDING
+}
+
+model Subscription {
+  id     String             @id @default(uuid())
+  plan   PlanTier
+  status SubscriptionStatus
+
+  khaltiIdx      String?
+  amountPaid     Int
+  expiresAt      DateTime
+  workspaceLimit Int?
+
+  workspaceId String    @unique
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

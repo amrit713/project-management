@@ -25,3 +25,13 @@ export const snakeCaseToTitleCase = (str: string) => {
     .replace(/_/g, " ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
 };
+
+export const currencyFormatter = (amount: string | number | null) => {
+  const changeCurrency = Number(amount) / 100;
+  return new Intl.NumberFormat("en-NP", {
+    style: "currency",
+    currency: "NPR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(changeCurrency);
+};

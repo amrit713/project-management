@@ -1,4 +1,10 @@
-import { Member, MemberRole, Project, Task } from "@prisma/client";
+import {
+  Member,
+  MemberRole,
+  Project,
+  Subscription,
+  Task,
+} from "@prisma/client";
 
 export type TaskType = Omit<
   Task,
@@ -50,3 +56,12 @@ export interface EditTask
     };
   };
 }
+
+export type SubscriptionType = Omit<
+  Subscription,
+  "createdAt" | "updatedAt" | "expiresAt"
+> & {
+  createdAt: string;
+  updatedAt: string;
+  expiresAt: string;
+};
