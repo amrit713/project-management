@@ -54,8 +54,8 @@ const app = new Hono<{ Variables: Variables }>()
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          return_url: `http://localhost:3000/workspaces/${workspaceId}/payment/khalti/callback`,
-          website_url: "http://localhost:3000",
+          return_url: `${process.env.NEXT_PUBLIC_APP_URL}/workspaces/${workspaceId}/payment/khalti/callback`,
+          website_url: process.env.KHALTI_SECRET_KEY!,
           amount,
           purchase_order_id: `${user.id}-${Date.now()}`,
           purchase_order_name: "PluseBoard Subscription",
