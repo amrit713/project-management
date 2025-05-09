@@ -25,16 +25,16 @@ export const Thankyou = ({ data }: { data?: SubscriptionType }) => {
   const orderId = searchParams.get("purchase_order_id");
   return (
     <div className="w-full max-w-3xl flex flex-col gap-8">
-      <div className="text-center space-y-3">
+      <div className="text-center space-y-3    mt-4">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100">
           <CheckCircle className="h-10 w-10 text-green-600" />
         </div>
         <h1 className="text-3xl font-bold text-neutral-900 sm:text-4xl">
-          Payment Successful!
+          🎉 Success! Your payment has been processed.
         </h1>
         <p className="text-lg text-neutral-600">
-          Thank you for subscribing to our service. Your subscription is now
-          active.
+          Thank you for subscribing! Your account is now active, and you’re all
+          set to enjoy our services. Welcome aboard! 😊
         </p>
       </div>
 
