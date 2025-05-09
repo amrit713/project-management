@@ -28,7 +28,7 @@ export const useVerifySubscription = () => {
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("subscription initilize");
+      toast.success("payment verified");
       queryClient.invalidateQueries({ queryKey: ["subscription"] });
 
       //refetch  account key

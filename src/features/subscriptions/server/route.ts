@@ -36,15 +36,12 @@ const app = new Hono<{ Variables: Variables }>()
     ),
     async (c) => {
       const user = c.get("user");
-
       if (!user) {
         throw new HTTPException(401, { message: "unauthorized" });
       }
 
       let { amount, workspaceId } = c.req.valid("json");
       amount = amount * 100;
-
-      console.log(process.env.KHALTI_SECRET_KEY!);
 
       const response = await fetch(process.env.KHALTI_INITIATE_URL!, {
         method: "POST",
@@ -54,8 +51,9 @@ const app = new Hono<{ Variables: Variables }>()
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          return_url: `${process.env.NEXT_PUBLIC_APP_URL}/workspaces/${workspaceId}/payment/khalti/callback`,
-          website_url: process.env.KHALTI_SECRET_KEY!,
+          return_url: `${process.env
+            .NEXT_PUBLIC_APP_URL!}/workspaces/${workspaceId}/payment/khalti/callback`,
+          website_url: process.env.NEXT_PUBLIC_APP_URL!,
           amount,
           purchase_order_id: `${user.id}-${Date.now()}`,
           purchase_order_name: "PluseBoard Subscription",
@@ -79,6 +77,8 @@ const app = new Hono<{ Variables: Variables }>()
       });
 
       const data = await response.json();
+
+      console.log(data);
 
       if (!response.ok) {
         throw new HTTPException(response.status as ContentfulStatusCode, {

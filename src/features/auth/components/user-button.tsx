@@ -23,12 +23,11 @@ import { Badge } from "@/components/ui/badge";
 export const UserButton = () => {
   const workspaceId = useWorkspaceId();
   const { mutate: logout } = useLogout();
-  const { data: subscription, isLoading: isSubscriptionLoading } =
-    useGetSubscription();
+  const { data: subscription } = useGetSubscription();
 
   const { data: user, isLoading: isUserLoading } = useCurrent();
 
-  if (isUserLoading || isSubscriptionLoading) {
+  if (isUserLoading) {
     return (
       <div className="size-10  flex items-center justify-center bg-primary/10 border-neutral-400 rounded-full">
         <Loader className="size-4 animate-spin text-muted-foreground" />
@@ -68,7 +67,7 @@ export const UserButton = () => {
             </AvatarFallback>
           </Avatar>
 
-          {subscription?.plan !== PlanTier.FREE && (
+          {subscription && subscription?.plan !== PlanTier.FREE && (
             <Badge className=" rounded">{subscription?.plan}</Badge>
           )}
           <div className=" flex flex-col items-center justify-center">
@@ -88,7 +87,7 @@ export const UserButton = () => {
           className="py-2 text-neutral-900  font-medium "
           asChild
         >
-          {subscription?.plan === PlanTier.FREE ? (
+          {subscription?.plan === PlanTier.FREE || !subscription ? (
             <Link
               href={`/workspaces/${workspaceId}/payment`}
               className="flex items-center gap-2"
@@ -103,7 +102,7 @@ export const UserButton = () => {
             >
               <Zap className="text-primary size-4" />
               <p className="text-primary">
-                Upgraded to {snakeCaseToTitleCase(subscription?.plan ?? "PRO")}{" "}
+                Upgraded to {snakeCaseToTitleCase(subscription?.plan ?? "PRO")}
               </p>
             </Link>
           )}
