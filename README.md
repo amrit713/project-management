@@ -9,10 +9,9 @@
 - Multi-workspace support — manage multiple teams or projects within separate workspaces
 - Task and project management with boards, lists, and customizable statuses
 - User onboarding and authentication system
-- Subscription-based billing integrated with Stripe
+- Subscription-based billing integrated with Khalti
 - Admin dashboard for workspace and user management
-- Real-time notifications and reminders using BullMQ and Redis
-- Rate limiting for API requests to enhance security and performance
+- Real-time notifications 
 - Responsive and modern UI built with Next.js and React
 - Data persistence with PostgreSQL using Prisma ORM
 
@@ -21,11 +20,11 @@
 ## Tech Stack
 
 - **Frontend:** Next.js, React  
-- **Backend:** Node.js, API routes with Next.js  
+- **Backend:** Node.js, Hono.js API routes with Next.js  
 - **Database:** PostgreSQL  
 - **ORM:** Prisma  
 - **Queue & Notifications:** BullMQ with ioredis  
-- **Payments:** Stripe  
+- **Payments:** Khalti
 - **Hosting:** Vercel (frontend), any compatible backend for serverless or containerized deployment
 
 ---
